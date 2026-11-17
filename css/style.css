@@ -271,3 +271,270 @@ footer {
     }
 }
 
+
+/* Dashboard */
+
+.dashboard {
+    padding: 20px 0;
+}
+
+.dashboard h1 {
+    color: #1e3a5f;
+    margin-bottom: 8px;
+}
+
+.dashboard > p {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(min(100%, 240px), 1fr)
+    );
+    gap: 20px;
+}
+
+.dashboard-card {
+    display: block;
+    background: white;
+    padding: 24px;
+    border: 1px solid #e2e7ee;
+    border-radius: 12px;
+    color: #222;
+    text-decoration: none;
+}
+
+.dashboard-card h2 {
+    color: #1e3a5f;
+    font-size: 20px;
+    margin-top: 0;
+}
+
+.dashboard-card p {
+    color: #666;
+}
+
+a.dashboard-card:hover {
+    border-color: #3567a1;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+
+/* =====================================
+   DASHBOARD BIOGYM
+===================================== */
+
+.painel {
+    padding: 12px 0 40px;
+}
+
+/* Boas-vindas */
+
+.painel-boas-vindas {
+    background: linear-gradient(
+        120deg,
+        #173b61,
+        #28649b
+    );
+    color: white;
+    padding: 44px;
+    border-radius: 18px;
+    margin-bottom: 38px;
+}
+
+.painel-etiqueta {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #b9d7f2;
+    margin-bottom: 16px;
+}
+
+.painel-boas-vindas h1 {
+    font-size: 34px;
+    margin: 0 0 14px;
+    color: white;
+}
+
+.painel-boas-vindas p {
+    max-width: 570px;
+    line-height: 1.7;
+    color: #e4edf7;
+    margin: 0;
+}
+
+/* Títulos das secções */
+
+.painel-seccao {
+    margin-bottom: 40px;
+}
+
+.painel-titulo {
+    margin-bottom: 22px;
+}
+
+.painel-titulo h2 {
+    color: #173b61;
+    font-size: 24px;
+    margin: 0 0 8px;
+}
+
+.painel-titulo p {
+    color: #68788a;
+    margin: 0;
+}
+
+/* Grelha dos cartões */
+
+.painel-grelha {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+/* Cartões */
+
+.painel-cartao {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: 1px solid #dfe6ef;
+    border-radius: 14px;
+    padding: 28px;
+    text-decoration: none;
+    color: #222;
+    min-height: 230px;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+a.painel-cartao:hover {
+    transform: translateY(-4px);
+    border-color: #28649b;
+    box-shadow: 0 12px 28px rgba(
+        23, 59, 97, 0.12
+    );
+}
+
+a.painel-cartao:focus-visible {
+    outline: 3px solid #28649b;
+    outline-offset: 3px;
+}
+
+.painel-icone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    background: #eaf1f8;
+    border-radius: 12px;
+    font-size: 25px;
+    margin-bottom: 18px;
+}
+
+.painel-cartao h3 {
+    color: #173b61;
+    font-size: 19px;
+    margin: 0 0 10px;
+}
+
+.painel-cartao p {
+    color: #68788a;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 20px;
+}
+
+/* Ações e estados */
+
+.painel-acao {
+    color: #28649b;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: auto;
+}
+
+.painel-indisponivel {
+    color: #8793a2;
+    background: #f1f3f6;
+    border-radius: 20px;
+    padding: 7px 12px;
+    font-size: 12px;
+    align-self: flex-start;
+    margin-top: auto;
+}
+
+/* Responsividade */
+
+@media (max-width: 650px) {
+    .painel-boas-vindas {
+        padding: 28px 22px;
+    }
+
+    .painel-boas-vindas h1 {
+        font-size: 26px;
+    }
+
+    .painel-grelha {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .painel-cartao {
+        min-height: auto;
+        padding: 22px;
+    }
+}
+
+
+/* Métricas do dashboard */
+
+.painel-estatisticas {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.painel-metrica {
+    background: #ffffff;
+    border: 1px solid #e5e2dd;
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.painel-metrica > span {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: #77736d;
+    margin-bottom: 16px;
+}
+
+.painel-metrica strong {
+    display: block;
+    font-size: 32px;
+    font-weight: 500;
+    color: #1b1a18;
+    margin-bottom: 8px;
+}
+
+.painel-metrica p {
+    color: #77736d;
+    font-size: 13px;
+    margin: 0;
+}
+
+@media (max-width: 750px) {
+    .painel-estatisticas {
+        grid-template-columns: 1fr;
+    }
+}
+

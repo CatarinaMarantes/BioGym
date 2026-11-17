@@ -43,9 +43,16 @@ INSERT INTO Certificacao (idTreinador, idModalidade, nome, entidadeEmissora, dat
 (3, 2, 'Instrutor Certificado de Hatha Yoga', 'Yoga Alliance', '2022-11-20', 1, '2022-11-25');
 
 -- Aulas
-INSERT INTO Aula (id, data, horaInicio, horaFim, nivel, vagas, idModalidade, idSala, idTreinador) VALUES
-(1, '2026-11-11', '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3),
-(2, '2026-11-11', '18:30', '19:30', 'INTERMEDIO', 20, 3, 3, 2);
+INSERT INTO Aula
+    (id, data, horaInicio, horaFim, nivel, vagas, idModalidade, idSala, idTreinador)
+VALUES
+    (3, '2026-12-01', '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3),
+
+    (4, '2026-12-02', '18:30', '19:30', 'INTERMEDIO', 20, 3, 3, 2),
+
+    (5, '2026-12-03', '10:00', '11:00', 'AVANCADO', 30, 1, 1, 2),
+
+    (6, '2026-12-04', '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3);
 
 -- Inscrições em Aulas
 INSERT INTO Inscricao (idMembro, idAula, dataInscricao, estado, notaAula, notaTreinador, comentario) VALUES
