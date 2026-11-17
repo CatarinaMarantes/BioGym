@@ -18,6 +18,11 @@ if (!$utilizador || !password_verify($password, $utilizador['passwordHash'])) {
     redirecionar('/login.php');
 }
 
+if (!$utilizador['ativo']) {
+    adicionarMensagem('erro', 'A conta está desativada. Contacte a administração.');
+    redirecionar('/login.php');
+}
+
 session_regenerate_id(true);
 $_SESSION['id']     = $utilizador['id'];
 $_SESSION['nome']   = $utilizador['nome'];

@@ -34,7 +34,9 @@ INSERT INTO Sala (id, nome, capacidade) VALUES
 INSERT INTO Equipamento (id, nome, estado, idSala) VALUES
 (1, 'Passadeira Pro 500', 'DISPONIVEL', 1),
 (2, 'Bicicleta Spinning X', 'DISPONIVEL', 3),
-(3, 'Multipower Squat Rack', 'EM_MANUTENCAO', 1);
+(3, 'Multipower Squat Rack', 'EM_MANUTENCAO', 1),
+(4, 'Máquina de Remo', 'EM_USO', 1),
+(5, 'Tapetes de Yoga (conjunto)', 'DISPONIVEL', 2);
 
 -- Certificações
 INSERT INTO Certificacao (idTreinador, idModalidade, nome, entidadeEmissora, dataObtencao, validada, dataValidacao) VALUES
@@ -42,37 +44,49 @@ INSERT INTO Certificacao (idTreinador, idModalidade, nome, entidadeEmissora, dat
 (2, 3, 'Instrutor de Indoor Cycling', 'Schwinn Fitness', '2024-02-12', 1, '2024-02-20'),
 (3, 2, 'Instrutor Certificado de Hatha Yoga', 'Yoga Alliance', '2022-11-20', 1, '2022-11-25');
 
--- Aulas (1 e 2 já decorreram, para testar avaliações; 3 a 6 são futuras)
+-- As datas são relativas ao dia em que a base de dados é criada (init.php),
+-- para haver sempre aulas e sessões futuras para testar.
+
+-- Aulas (1 a 3 já decorreram, para testar avaliações; 4 a 10 são futuras)
 INSERT INTO Aula (id, data, horaInicio, horaFim, nivel, vagas, idModalidade, idSala, idTreinador) VALUES
-(1, '2026-11-10', '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3),
-(2, '2026-11-11', '18:30', '19:30', 'INTERMEDIO', 20, 3, 3, 2),
-(3, '2026-12-01', '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3),
-(4, '2026-12-02', '18:30', '19:30', 'INTERMEDIO', 20, 3, 3, 2),
-(5, '2026-12-03', '10:00', '11:00', 'AVANCADO', 30, 1, 1, 2),
-(6, '2026-12-04', '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3);
+(1, date('now', '-8 days'), '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3),
+(2, date('now', '-7 days'), '18:30', '19:30', 'INTERMEDIO', 20, 3, 3, 2),
+(3, date('now', '-2 days'), '10:00', '11:00', 'AVANCADO', 30, 1, 1, 2),
+(4, date('now', '+3 days'), '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3),
+(5, date('now', '+4 days'), '18:30', '19:30', 'INTERMEDIO', 20, 3, 3, 2),
+(6, date('now', '+5 days'), '10:00', '11:00', 'AVANCADO', 30, 1, 1, 2),
+(7, date('now', '+6 days'), '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3),
+(8, date('now', '+10 days'), '18:30', '19:30', 'AVANCADO', 20, 3, 3, 2),
+(9, date('now', '+12 days'), '10:00', '11:00', 'INTERMEDIO', 30, 1, 1, 2),
+(10, date('now', '+14 days'), '09:00', '10:00', 'INTERMEDIO', 2, 2, 2, 3);
 
 -- Inscrições em Aulas
 INSERT INTO Inscricao (idMembro, idAula, dataInscricao, estado, notaAula, notaTreinador, comentario) VALUES
-(4, 1, '2026-11-07 10:00', 'ATIVA', 5, 5, 'Excelente aula para quem está a começar.'),
-(5, 2, '2026-11-08 14:20', 'ATIVA', 4, 5, NULL),
-(4, 5, '2026-11-15 18:00', 'ATIVA', NULL, NULL, NULL),
-(5, 4, '2026-11-16 09:30', 'ATIVA', NULL, NULL, NULL),
-(5, 3, '2026-11-16 09:35', 'CANCELADA', NULL, NULL, NULL);
+(4, 1, datetime('now', '-12 days'), 'ATIVA', 5, 5, 'Excelente aula para quem está a começar.'),
+(5, 2, datetime('now', '-10 days'), 'ATIVA', 4, 5, NULL),
+(4, 3, datetime('now', '-5 days'), 'ATIVA', NULL, NULL, NULL),
+(5, 3, datetime('now', '-5 days'), 'ATIVA', NULL, NULL, NULL),
+(4, 6, datetime('now', '-1 days'), 'ATIVA', NULL, NULL, NULL),
+(5, 5, datetime('now', '-1 days'), 'ATIVA', NULL, NULL, NULL),
+(5, 4, datetime('now', '-1 days'), 'CANCELADA', NULL, NULL, NULL),
+(3, 8, datetime('now', '-1 days'), 'ATIVA', NULL, NULL, NULL);
 
--- Planos de Treino e Itens
-INSERT INTO PlanoTreino (id, nome, objetivo, frequenciaSemanal, duracaoSemanas) VALUES
-(1, 'Hipertrofia 3 Dias', 'Ganho de massa muscular', 3, 8);
+-- Planos de Treino e Itens (o plano pertence ao treinador que o criou)
+INSERT INTO PlanoTreino (id, nome, objetivo, frequenciaSemanal, duracaoSemanas, idTreinador) VALUES
+(1, 'Hipertrofia 3 Dias', 'Ganho de massa muscular', 3, 8, 2),
+(2, 'Mobilidade e Postura', 'Flexibilidade e prevenção de lesões', 2, 6, 3);
 
 INSERT INTO ItemPlano (id, idPlanoTreino, ordem, exercicio, series, repeticoes) VALUES
 (1, 1, 1, 'Supino Reto com Barra', 4, 10),
-(2, 1, 2, 'Agachamento Livre', 4, 12);
+(2, 1, 2, 'Agachamento Livre', 4, 12),
+(3, 2, 1, 'Saudação ao Sol', 3, 8);
 
 -- Avaliações Físicas
 INSERT INTO AvaliacaoFisica (id, data, peso, altura, percentagemGordura, perimetroCintura, perimetroPeito, perimetroBraco, perimetroCoxa, idMembro, idTreinador, idPlanoTreino) VALUES
-(1, '2026-01-15', 75.5, 1.78, 16.5, 82.0, 98.0, 34.0, 56.0, 4, 2, 1);
+(1, date('now', '-60 days'), 75.5, 1.78, 16.5, 82.0, 98.0, 34.0, 56.0, 4, 2, 1);
 
 -- Sessões de Personal Training (PT)
 INSERT INTO SessaoPT (id, data, horaInicio, horaFim, estado, idMembro, idTreinador) VALUES
-(1, '2026-11-12', '11:00', '12:00', 'CONCLUIDA', 4, 2),
-(2, '2026-12-05', '11:00', '12:00', 'CONFIRMADA', 4, 2),
-(3, '2026-12-07', '17:00', '18:00', 'PENDENTE', 5, 3);
+(1, date('now', '-6 days'), '11:00', '12:00', 'CONCLUIDA', 4, 2),
+(2, date('now', '+4 days'), '11:00', '12:00', 'CONFIRMADA', 4, 2),
+(3, date('now', '+7 days'), '17:00', '18:00', 'PENDENTE', 5, 3);

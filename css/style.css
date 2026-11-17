@@ -1,17 +1,34 @@
 /* =====================================
    Variáveis
+   Todos os pares texto/fundo cumprem o contraste mínimo
+   WCAG AA (4.5:1). Ao mudar uma cor, voltar a verificar.
 ===================================== */
 
 :root {
     --cor-principal: #1e3a5f;
     --cor-principal-clara: #28649b;
-    --cor-destaque: #3567a1;
-    --cor-fundo: #f5f5f5;
-    --cor-texto: #222;
-    --cor-texto-suave: #68788a;
-    --cor-borda: #e2e7ee;
-    --cor-sucesso: #20764a;
-    --cor-erro: #a12626;
+
+    --cor-fundo: #f4f6f9;
+    --cor-cartao: #ffffff;
+    --cor-borda: #cdd6e1;
+    --cor-borda-campo: #67768a;
+    --cor-nivel-fundo: #e3edf8;
+    --cor-nivel-texto: #1f4a7a;
+    --cor-sombra: rgba(0, 0, 0, 0.04);
+    --cor-sombra-forte: rgba(30, 58, 95, 0.12);
+
+    --cor-texto: #1f2933;
+    --cor-texto-suave: #4a5a6b;
+    --cor-texto-claro: #ffffff;
+
+    --cor-sucesso: #1a6640;
+    --cor-sucesso-fundo: #e1f3e8;
+    --cor-erro: #9b1c1c;
+    --cor-erro-fundo: #fbe7e7;
+    --cor-aviso: #7a4a00;
+    --cor-aviso-fundo: #fff1cf;
+    --cor-neutro: #3b4a5a;
+    --cor-neutro-fundo: #e6ebf1;
 }
 
 
@@ -41,6 +58,19 @@ main {
     padding: 2em;
 }
 
+a {
+    color: var(--cor-principal-clara);
+}
+
+:focus-visible {
+    outline: 3px solid var(--cor-principal-clara);
+    outline-offset: 2px;
+}
+
+h2 {
+    color: var(--cor-principal);
+}
+
 /* Etiqueta pequena em maiúsculas por cima dos títulos */
 .etiqueta {
     font-size: 12px;
@@ -48,6 +78,7 @@ main {
     letter-spacing: 2px;
     text-transform: uppercase;
     margin: 0 0 12px;
+    color: var(--cor-principal-clara);
 }
 
 
@@ -59,16 +90,26 @@ main {
 
 body > header {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    gap: 0.5em 1.5em;
     padding: 1em 2em;
     background: var(--cor-principal);
 }
 
 body > header a,
 body > header span {
-    color: white;
+    color: var(--cor-texto-claro);
     text-decoration: none;
+}
+
+body > header nav a:hover {
+    text-decoration: underline;
+}
+
+body > header :focus-visible {
+    outline-color: var(--cor-texto-claro);
 }
 
 .logo {
@@ -78,8 +119,9 @@ body > header span {
 
 nav {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 1.5em;
+    gap: 0.5em 1.5em;
 }
 
 nav form {
@@ -88,17 +130,27 @@ nav form {
 
 nav button {
     background: none;
-    border: 1px solid white;
-    color: white;
+    border: 1px solid var(--cor-texto-claro);
+    color: var(--cor-texto-claro);
     padding: 0.3em 0.8em;
     cursor: pointer;
+    font-size: 1em;
+}
+
+nav button:hover {
+    background: var(--cor-texto-claro);
+    color: var(--cor-principal);
 }
 
 body > footer {
     text-align: center;
     padding: 1em;
     background: var(--cor-principal);
-    color: white;
+    color: var(--cor-texto-claro);
+}
+
+body > footer p {
+    margin: 0;
 }
 
 
@@ -109,29 +161,135 @@ body > footer {
 .mensagem {
     padding: 0.8em 1em;
     border-radius: 4px;
+    border-left: 4px solid currentColor;
 }
 
 .mensagem.sucesso {
-    background: #d4edda;
-    color: #155724;
+    background: var(--cor-sucesso-fundo);
+    color: var(--cor-sucesso);
 }
 
 .mensagem.erro {
-    background: #f8d7da;
-    color: #721c24;
+    background: var(--cor-erro-fundo);
+    color: var(--cor-erro);
 }
 
 
 /* =====================================
-   Formulários (login e registo)
+   Botões
+   Servem para <button> e <a>
+===================================== */
+
+.botao,
+.botao-secundario,
+.botao-perigo {
+    display: inline-block;
+    padding: 0.5em 1em;
+    border: 2px solid var(--cor-principal);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.botao {
+    background: var(--cor-principal);
+    color: var(--cor-texto-claro);
+}
+
+.botao:hover {
+    background: var(--cor-principal-clara);
+    border-color: var(--cor-principal-clara);
+}
+
+.botao-secundario {
+    background: var(--cor-cartao);
+    color: var(--cor-principal);
+}
+
+.botao-secundario:hover {
+    background: var(--cor-neutro-fundo);
+}
+
+.botao-perigo {
+    background: var(--cor-cartao);
+    border-color: var(--cor-erro);
+    color: var(--cor-erro);
+}
+
+.botao-perigo:hover {
+    background: var(--cor-erro-fundo);
+}
+
+/* Botões lado a lado (ex.: Confirmar / Recusar) */
+.acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.acoes form {
+    margin: 0;
+}
+
+
+/* =====================================
+   Etiquetas de estado
+===================================== */
+
+.estado {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.estado-sucesso {
+    background: var(--cor-sucesso-fundo);
+    color: var(--cor-sucesso);
+}
+
+.estado-aviso {
+    background: var(--cor-aviso-fundo);
+    color: var(--cor-aviso);
+}
+
+.estado-erro {
+    background: var(--cor-erro-fundo);
+    color: var(--cor-erro);
+}
+
+.estado-neutro {
+    background: var(--cor-neutro-fundo);
+    color: var(--cor-neutro);
+}
+
+
+/* =====================================
+   Formulários
 ===================================== */
 
 .formulario {
     max-width: 400px;
     margin: 0 auto;
-    background: white;
+    background: var(--cor-cartao);
     padding: 2em;
     border-radius: 8px;
+    border: 1px solid var(--cor-borda);
+}
+
+/* Formulário mais largo, para páginas de gestão */
+.formulario.largo {
+    max-width: none;
+    margin: 0 0 32px;
+}
+
+.formulario h2 {
+    margin-top: 0;
 }
 
 .formulario form {
@@ -145,26 +303,148 @@ body > footer {
     font-weight: bold;
 }
 
-.formulario input {
+.formulario input,
+.formulario select,
+.formulario textarea {
     padding: 0.6em;
-    border: 1px solid #ccc;
+    border: 1px solid var(--cor-borda-campo);
     border-radius: 4px;
+    font-family: inherit;
     font-size: 1em;
+    color: var(--cor-texto);
+    background: var(--cor-cartao);
 }
 
-.formulario button {
+.formulario .ajuda {
+    margin: 0.3em 0 0;
+    font-size: 13px;
+    color: var(--cor-texto-suave);
+}
+
+.formulario button:not(.botao):not(.botao-secundario):not(.botao-perigo) {
     margin-top: 1.5em;
     padding: 0.8em;
     background: var(--cor-principal);
-    color: white;
+    color: var(--cor-texto-claro);
     border: none;
     border-radius: 4px;
     font-size: 1em;
     cursor: pointer;
 }
 
-.formulario button:hover {
+.formulario button:not(.botao):not(.botao-secundario):not(.botao-perigo):hover {
     background: var(--cor-principal-clara);
+}
+
+/* Campos lado a lado nos formulários largos */
+.formulario .campos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 0 20px;
+}
+
+.formulario .campos > p {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* =====================================
+   Blocos e tabelas (páginas de gestão)
+===================================== */
+
+.bloco {
+    margin-bottom: 40px;
+}
+
+.bloco > h2 {
+    font-size: 22px;
+    margin: 0 0 6px;
+}
+
+.bloco > p {
+    color: var(--cor-texto-suave);
+    margin: 0 0 16px;
+}
+
+.vazio {
+    background: var(--cor-cartao);
+    border: 1px dashed var(--cor-borda);
+    border-radius: 8px;
+    padding: 20px;
+    color: var(--cor-texto-suave);
+    margin: 0;
+}
+
+.tabela-scroll {
+    overflow-x: auto;
+    background: var(--cor-cartao);
+    border: 1px solid var(--cor-borda);
+    border-radius: 10px;
+}
+
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.tabela caption {
+    text-align: left;
+    padding: 14px 16px 0;
+    font-weight: bold;
+    color: var(--cor-principal);
+}
+
+.tabela th,
+.tabela td {
+    padding: 12px 16px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+.tabela th {
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--cor-texto-suave);
+    background: var(--cor-fundo);
+    white-space: nowrap;
+}
+
+.tabela tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tabela select {
+    padding: 0.4em;
+    border: 1px solid var(--cor-borda-campo);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--cor-texto);
+    background: var(--cor-cartao);
+}
+
+.tabela form {
+    margin: 0;
+}
+
+.tabela .acoes {
+    flex-wrap: nowrap;
+}
+
+.tabela .formulario-linha {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.nota-tabela {
+    color: var(--cor-texto-suave);
+    font-size: 13px;
 }
 
 
@@ -176,10 +456,6 @@ body > footer {
     margin-bottom: 32px;
 }
 
-.cabecalho-pagina .etiqueta {
-    color: var(--cor-destaque);
-}
-
 .cabecalho-pagina h1 {
     color: var(--cor-principal);
     font-size: 32px;
@@ -187,8 +463,13 @@ body > footer {
 }
 
 .cabecalho-pagina p {
-    color: #666;
+    color: var(--cor-texto-suave);
     margin: 0;
+}
+
+.cabecalho-pagina .etiqueta {
+    color: var(--cor-principal-clara);
+    margin-bottom: 12px;
 }
 
 .grelha-aulas {
@@ -198,11 +479,13 @@ body > footer {
 }
 
 .cartao-aula {
-    background: white;
+    background: var(--cor-cartao);
     border: 1px solid var(--cor-borda);
     border-radius: 12px;
     padding: 24px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 14px var(--cor-sombra);
+    display: flex;
+    flex-direction: column;
 }
 
 .cartao-aula header {
@@ -213,15 +496,16 @@ body > footer {
     margin-bottom: 24px;
 }
 
-.cartao-aula h2 {
+.cartao-aula h2,
+.cartao-aula h3 {
     color: var(--cor-principal);
     font-size: 22px;
     margin: 0;
 }
 
 .etiqueta-nivel {
-    background: #e8f0fa;
-    color: #28558a;
+    background: var(--cor-nivel-fundo);
+    color: var(--cor-nivel-texto);
     padding: 6px 10px;
     border-radius: 20px;
     font-size: 12px;
@@ -242,7 +526,7 @@ body > footer {
 }
 
 .cartao-aula dt {
-    color: #555;
+    color: var(--cor-texto-suave);
     font-weight: bold;
 }
 
@@ -252,9 +536,26 @@ body > footer {
 }
 
 .cartao-aula footer {
-    border-top: 1px solid #eee;
+    border-top: 1px solid var(--cor-borda);
     padding-top: 18px;
-    margin-top: 24px;
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.cartao-aula footer p {
+    margin: 0;
+}
+
+.cartao-aula footer form {
+    margin: 0;
+}
+
+.cartao-aula footer .botao,
+.cartao-aula footer .botao-perigo {
+    width: 100%;
+    text-align: center;
 }
 
 .vagas-disponiveis,
@@ -271,37 +572,18 @@ body > footer {
     color: var(--cor-erro);
 }
 
+/* Lista de membros inscritos (área do treinador) */
+.lista-inscritos {
+    margin: 0;
+    padding-left: 1.2em;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
 
 /* =====================================
    Dashboard
 ===================================== */
-
-/* Boas-vindas */
-
-.painel-boas-vindas {
-    background: linear-gradient(120deg, #173b61, var(--cor-principal-clara));
-    color: white;
-    padding: 44px;
-    border-radius: 18px;
-    margin: 12px 0 38px;
-}
-
-.painel-boas-vindas .etiqueta {
-    color: #b9d7f2;
-    margin-bottom: 16px;
-}
-
-.painel-boas-vindas h1 {
-    font-size: 34px;
-    margin: 0 0 14px;
-}
-
-.painel-boas-vindas p {
-    max-width: 570px;
-    line-height: 1.7;
-    color: #e4edf7;
-    margin: 0;
-}
 
 /* Secções: a própria secção é a grelha dos cartões.
    O cabeçalho e as métricas ocupam a largura toda. */
@@ -319,7 +601,7 @@ body > footer {
 }
 
 .painel-seccao > header h2 {
-    color: #173b61;
+    color: var(--cor-principal);
     font-size: 24px;
     margin: 0 0 8px;
 }
@@ -339,8 +621,8 @@ body > footer {
 }
 
 .painel-metrica {
-    background: white;
-    border: 1px solid #e5e2dd;
+    background: var(--cor-cartao);
+    border: 1px solid var(--cor-borda);
     border-radius: 16px;
     padding: 24px;
 }
@@ -349,41 +631,39 @@ body > footer {
     font-size: 11px;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    color: #77736d;
+    color: var(--cor-texto-suave);
     margin-bottom: 16px;
 }
 
 .painel-metrica dd {
     margin: 0;
-    color: #77736d;
+    color: var(--cor-texto-suave);
     font-size: 13px;
 }
 
 .painel-metrica .valor {
     font-size: 32px;
-    color: #1b1a18;
+    color: var(--cor-texto);
     margin-bottom: 8px;
 }
 
 /* Cartões */
 
 .painel-cartao {
-    display: flex;
-    flex-direction: column;
-    background: white;
-    border: 1px solid #dfe6ef;
-    border-radius: 14px;
-    padding: 28px;
+    background: var(--cor-cartao);
+    border: 1px solid var(--cor-borda);
+    border-radius: 8px;
+    padding: 22px 24px;
     text-decoration: none;
-    color: var(--cor-texto);
-    min-height: 230px;
+    color: var(--cor-principal);
+    font-weight: bold;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 a.painel-cartao:hover {
     transform: translateY(-4px);
     border-color: var(--cor-principal-clara);
-    box-shadow: 0 12px 28px rgba(23, 59, 97, 0.12);
+    box-shadow: 0 12px 28px var(--cor-sombra-forte);
 }
 
 a.painel-cartao:focus-visible {
@@ -391,41 +671,10 @@ a.painel-cartao:focus-visible {
     outline-offset: 3px;
 }
 
-.painel-icone {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 54px;
-    height: 54px;
-    background: #eaf1f8;
-    border-radius: 12px;
-    font-size: 25px;
-    margin-bottom: 18px;
-}
-
-.painel-cartao h3 {
-    color: #173b61;
-    font-size: 19px;
-    margin: 0 0 10px;
-}
-
-.painel-cartao p {
-    color: var(--cor-texto-suave);
-    font-size: 14px;
-    line-height: 1.6;
-    margin: 0 0 20px;
-}
-
-.painel-acao {
-    color: var(--cor-principal-clara);
-    font-size: 14px;
-    font-weight: bold;
-    margin-top: auto;
-}
-
+/* Cartão ainda não implementado */
 .painel-indisponivel {
-    color: #8793a2;
-    background: #f1f3f6;
+    color: var(--cor-neutro);
+    background: var(--cor-neutro-fundo);
     border-radius: 20px;
     padding: 7px 12px;
     font-size: 12px;
@@ -445,12 +694,12 @@ a.painel-cartao:focus-visible {
 }
 
 @media (max-width: 650px) {
-    .painel-boas-vindas {
-        padding: 28px 22px;
+    main {
+        padding: 1.2em;
     }
 
-    .painel-boas-vindas h1 {
-        font-size: 26px;
+    body > header {
+        padding: 1em 1.2em;
     }
 
     .painel-seccao {
@@ -472,4 +721,164 @@ a.painel-cartao:focus-visible {
     .cartao-aula {
         padding: 20px;
     }
+
+    .formulario {
+        padding: 1.4em;
+    }
+}
+
+
+/* =====================================
+   Separadores (admin.php e treinador.php)
+===================================== */
+
+.separadores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1.5em;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+.separadores a {
+    padding: 8px 16px;
+    border: 1px solid var(--cor-borda);
+    border-radius: 6px;
+    background: var(--cor-cartao);
+    color: var(--cor-principal);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.separadores a:hover {
+    background: var(--cor-neutro-fundo);
+}
+
+.separadores a.ativo {
+    background: var(--cor-principal);
+    border-color: var(--cor-principal);
+    color: var(--cor-texto-claro);
+}
+
+
+/* =====================================
+   Campos de formulário (fieldset), ajuda e ficheiros
+===================================== */
+
+fieldset.campos {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+}
+
+.formulario .ajuda {
+    display: block;
+}
+
+.formulario input[type="file"] {
+    padding: 0.4em;
+}
+
+.formulario input:disabled,
+.formulario input[readonly],
+.formulario select:disabled {
+    background: var(--cor-neutro-fundo);
+    color: var(--cor-neutro);
+}
+
+.formulario label.opcao {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: normal;
+}
+
+.formulario .acoes {
+    margin-top: 1.5em;
+}
+
+.formulario .acoes button {
+    margin-top: 0;
+}
+
+
+/* =====================================
+   Fotografia de perfil
+===================================== */
+
+.avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--cor-principal);
+    color: var(--cor-texto-claro);
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.formulario > .avatar {
+    margin-bottom: 8px;
+}
+
+.perfil-treinador header {
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 16px;
+}
+
+.perfil-treinador > p {
+    margin: 0 0 16px;
+    font-size: 14px;
+    color: var(--cor-texto-suave);
+}
+
+
+/* =====================================
+   Avaliação de aulas (notas 1 a 5)
+===================================== */
+
+details.avaliar summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--cor-principal-clara);
+}
+
+details.avaliar form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 240px;
+    margin-top: 10px;
+}
+
+details.avaliar textarea {
+    padding: 0.5em;
+    border: 1px solid var(--cor-borda-campo);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--cor-texto);
+    background: var(--cor-cartao);
+}
+
+fieldset.nota {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+fieldset.nota legend {
+    padding: 0;
+    margin-bottom: 4px;
+    font-weight: bold;
 }

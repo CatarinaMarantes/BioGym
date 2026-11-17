@@ -29,7 +29,8 @@ CREATE TABLE Utilizador (
     passwordHash TEXT NOT NULL,
     fotografia BLOB,
     biografia TEXT,
-    dataRegisto TEXT NOT NULL
+    dataRegisto TEXT NOT NULL,
+    ativo INTEGER NOT NULL DEFAULT 1 CHECK (ativo IN (0, 1))
 );
 
 CREATE TABLE Membro (
@@ -78,6 +79,7 @@ CREATE TABLE Aula (
     idModalidade INTEGER NOT NULL,
     idSala INTEGER NOT NULL,
     idTreinador INTEGER NOT NULL,
+    cancelada INTEGER NOT NULL DEFAULT 0 CHECK (cancelada IN (0, 1)),
     CHECK (horaFim > horaInicio),
     FOREIGN KEY (idModalidade) REFERENCES Modalidade(id),
     FOREIGN KEY (idSala) REFERENCES Sala(id),
@@ -128,7 +130,9 @@ CREATE TABLE PlanoTreino (
     nome TEXT NOT NULL,
     objetivo TEXT,
     frequenciaSemanal INTEGER NOT NULL CHECK (frequenciaSemanal >= 1 AND frequenciaSemanal <= 7),
-    duracaoSemanas INTEGER NOT NULL CHECK (duracaoSemanas > 0)
+    duracaoSemanas INTEGER NOT NULL CHECK (duracaoSemanas > 0),
+    idTreinador INTEGER NOT NULL,
+    FOREIGN KEY (idTreinador) REFERENCES Treinador(idUtilizador)
 );
 
 CREATE TABLE ItemPlano (

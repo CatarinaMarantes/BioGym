@@ -102,33 +102,40 @@ A palavra-passe de **todas** as contas é `password123`.
 ```
 html/
 ├── README.md
-├── index.php                 Redireciona para o login ou para a dashboard
-├── login.php                 Formulário de login
-├── registo.php               Formulário de registo de novo membro
-├── dashboard.php             Painel do utilizador, com uma secção por papel
-├── aulas.php                 Listagem das próximas aulas, com vagas disponíveis
-├── actions/                  Scripts que processam formulários (POST)
+├── index.php            Redireciona para o login ou para a dashboard
+├── login.php            Login
+├── registo.php          Registo de novo membro
+├── dashboard.php        Painel do utilizador, com uma secção por papel
+├── aulas.php            Aulas disponíveis, com filtros e inscrição/cancelamento
+├── treinadores.php      Perfis dos treinadores (fotografia, biografia, modalidades, avaliação média)
+├── equipamentos.php     Estado dos equipamentos (disponível, em uso, em manutenção)
+├── perfil.php           Edição do perfil (nome, telemóvel, biografia, fotografia)
+├── foto.php             Devolve a fotografia de perfil (só com sessão iniciada)
+├── membro.php           (membro) Separadores: as minhas aulas, personal training, avaliações físicas, plano de treino
+├── treinador.php        (treinador) Separadores: aulas, sessões de PT, avaliações, planos, certificações
+├── admin.php            (administrador) Separadores: utilizadores, aulas, salas/equipamentos, certificações
+├── actions/
 │   ├── action_login.php
 │   ├── action_logout.php
-│   └── action_registo.php
-├── css/
-│   └── style.css             Folha de estilos do website
+│   ├── action_registo.php
+│   ├── action_perfil.php   Atualização do perfil e da fotografia
+│   └── action_gestao.php   Todas as restantes operações (inscrições, PT, avaliações, planos, certificações, administração)
+├── css/style.css        Folha de estilos (cores definidas como variáveis no início)
 ├── database/
-│   ├── .htaccess             Bloqueia o acesso à pasta a partir do browser
-│   ├── create.sql            Script de criação das tabelas
-│   ├── populate.sql          Dados de teste
-│   ├── init.php              (Re)cria biogym.db a partir dos scripts SQL (só pela linha de comandos)
-│   ├── biogym.db             Base de dados SQLite (não está no Git)
-│   ├── connection.php        Ligação PDO à base de dados
-│   ├── utilizador.php        Queries relacionadas com utilizadores
-│   ├── aula.php              Queries relacionadas com aulas
-│   └── dashboard.php         Queries do resumo mostrado na dashboard
-├── images/                   Imagens do website
-├── templates/
-│   └── common.php            Header, footer e mensagens comuns a todas as páginas
-└── utils/
-    └── session.php           Sessão, token CSRF e funções auxiliares
+│   ├── .htaccess        Bloqueia o acesso à pasta a partir do browser
+│   ├── create.sql       Criação das tabelas
+│   ├── populate.sql     Dados de teste
+│   ├── init.php         (Re)cria biogym.db (só pela linha de comandos)
+│   ├── biogym.db        Base de dados SQLite (não está no Git)
+│   ├── connection.php   Ligação PDO e transações
+│   ├── utilizador.php   Utilizadores, papéis, contas ativas/desativadas, perfil e fotografia
+│   ├── aula.php         Aulas, inscrições, avaliação de aulas, criar/editar/cancelar aulas
+│   └── gestao.php       Horários, personal training, avaliações, planos, certificações, salas e equipamentos
+├── templates/common.php Header, footer, mensagens e componentes comuns
+└── utils/session.php    Sessão, CSRF, permissões e validação de dados
 ```
+
+`action_gestao.php` trata várias operações: cada formulário envia um campo escondido `op` (por exemplo `op=inscrever`) e `iniciarOperacao()` verifica o token CSRF e o papel exigido por essa operação. `membro.php`, `treinador.php` e `admin.php` mostram uma secção de cada vez, escolhida por `?sec=` (por exemplo `/admin.php?sec=aulas`).
 
 ### Organização do código
 
@@ -169,11 +176,19 @@ Algumas regras não podem ser impostas apenas com restrições SQL e são verifi
 
 - Um utilizador registado tem sempre pelo menos um papel (o registo cria `Utilizador` + `Membro` numa única transação).
 - As vagas disponíveis de uma aula contam apenas as inscrições com estado `ATIVA`.
-- *(a implementar)* O número de inscrições ativas numa aula não pode exceder as vagas.
-- *(a implementar)* O número de vagas de uma aula não pode exceder a capacidade da sala.
-- *(a implementar)* Um membro só pode avaliar aulas a que esteve inscrito e que já decorreram.
-- *(a implementar)* Uma sala ou um treinador não podem ter duas aulas/sessões sobrepostas.
-- *(a implementar)* Um treinador só pode dar aulas de modalidades em que tem certificação validada.
+- O número de inscrições ativas numa aula não pode exceder as vagas (verificado numa transação `BEGIN IMMEDIATE`, para que duas inscrições em simultâneo não ultrapassem o limite).
+- O número de vagas de uma aula não pode exceder a capacidade da sala.
+- Um membro só pode avaliar (uma vez) aulas a que esteve inscrito e que já terminaram; as notas vão de 1 a 5.
+- Uma sala ou um treinador não podem ter duas aulas/sessões sobrepostas, e um membro não pode ter duas atividades sobrepostas (`database/gestao.php`).
+- Um treinador só pode dar aulas de modalidades em que tem certificação validada.
+- Só se pode inscrever ou cancelar uma aula que ainda não começou; um treinador não se pode inscrever nas suas próprias aulas.
+- Um membro que cancele uma inscrição pode voltar a inscrever-se (a inscrição cancelada é reativada, porque a chave é `(idMembro, idAula)`).
+- Uma sessão de PT é criada como `PENDENTE`; o treinador confirma ou recusa, e só pode concluir sessões confirmadas que já começaram.
+- Um utilizador tem sempre pelo menos um papel; um administrador não se retira a si próprio; um treinador com aulas, sessões, certificações ou avaliações não deixa de o ser.
+- Só se editam aulas futuras. Com inscritos, a modalidade, a data e o horário ficam bloqueados e as vagas não podem ficar abaixo do número de inscritos. Cancelar uma aula cancela as inscrições ativas e liberta a sala e o treinador.
+- Uma conta desativada não inicia sessão e, se já tinha sessão, perde-a no pedido seguinte. Ninguém desativa a própria conta, tem de sobrar um administrador ativo, e um treinador com aulas ou sessões futuras não pode ser desativado. Ao desativar um membro, cancelam-se as suas inscrições e sessões de PT futuras.
+- Cada plano de treino pertence ao treinador que o criou: só esse treinador o vê, o edita e o atribui numa avaliação física.
+- O nome e os papéis de quem tem sessão iniciada são relidos da base de dados em cada pedido (`atualizarSessao()`), por isso uma mudança de papéis vale logo, sem novo login.
 
 ---
 
@@ -190,7 +205,8 @@ Algumas regras não podem ser impostas apenas com restrições SQL e são verifi
 | **Enumeração de contas** | O login devolve a mesma mensagem para email inexistente e para palavra-passe errada. |
 | **Logout** | Feito por `POST` com token CSRF, e não por um link. |
 | **Acesso à base de dados** | A pasta `database/` tem um `.htaccess` com `Require all denied`, para que o `biogym.db` e os scripts não possam ser descarregados nem executados pelo browser. O `init.php` recusa correr fora da linha de comandos. |
-| **Páginas privadas** | A dashboard redireciona para o login quando não há sessão iniciada. |
+| **Upload de fotografia** | Só JPEG, PNG ou WebP (o tipo é lido do conteúdo, não do nome nem do tipo declarado), até 1 MB e 4000×4000 px. É guardada na base de dados e servida por `foto.php` com `X-Content-Type-Options: nosniff`. |
+| **Páginas privadas e permissões** | Cada página e cada action exige sessão e o papel certo (`requerPapel()` / `iniciarAction()` / `iniciarOperacao()`); sem permissão, redireciona com mensagem de erro. Esconder um botão não chega: a verificação é sempre feita no servidor. |
 
 ---
 
@@ -209,31 +225,27 @@ Algumas regras não podem ser impostas apenas com restrições SQL e são verifi
 - [x] Resumo do membro: próximas aulas inscritas, sessões de PT agendadas e último peso registado
 - [x] Listagem das próximas aulas (modalidade, nível, data, horário, sala, treinador e vagas disponíveis)
 - [x] Pasta `database/` protegida contra acesso pelo browser
+- [x] Inscrição e cancelamento de inscrição em aulas, com página «As minhas aulas»
+- [x] Marcação e cancelamento de sessões de personal training (membro) e confirmação/recusa/conclusão (treinador)
+- [x] Consulta das avaliações físicas e do plano de treino (membro)
+- [x] Registo de avaliações físicas e gestão de planos de treino e exercícios (treinador)
+- [x] Listagem das aulas do treinador com os membros inscritos
+- [x] Registo de certificações (treinador) e validação/rejeição (administrador)
+- [x] Gestão de utilizadores e papéis, aulas, salas e equipamentos (administrador)
+- [x] Revisão do design: contrastes de cor conforme WCAG AA, botões, tabelas e estados reutilizáveis
+
+- [x] Filtros na listagem de aulas (modalidade, nível, data, treinador)
+- [x] Avaliação de aulas e treinadores (1 a 5 + comentário) na página «As minhas aulas»
+- [x] Perfis dos treinadores, com avaliação média
+- [x] Estado dos equipamentos para os membros
+- [x] Edição do perfil, incluindo fotografia (todos os papéis)
+- [x] Administração: editar e cancelar aulas, ativar/desativar contas
+- [x] Planos de treino com dono (cada treinador só vê e edita os seus)
 
 ### Por implementar
 
-**Membros**
-- [ ] Filtros na listagem de aulas (modalidade, nível, data, treinador)
-- [ ] Inscrição e cancelamento de inscrição em aulas
-- [ ] Avaliação de aulas e treinadores (1 a 5 + comentário)
-- [ ] Consulta de perfis de treinadores
-- [ ] Consulta do estado dos equipamentos
-- [ ] Marcação de sessões de personal training
-- [ ] Consulta das avaliações físicas e do plano de treino
-- [ ] Edição do perfil (incluindo fotografia)
-
-**Treinadores**
-- [ ] Gestão do próprio perfil e certificações
-- [ ] Listagem das aulas atribuídas e dos membros inscritos
-- [ ] Confirmação/conclusão de sessões de personal training
-- [ ] Registo de avaliações físicas
-
-**Administradores**
-- [ ] Gestão de membros e treinadores
-- [ ] Gestão de aulas e atribuição de treinadores
-- [ ] Gestão de salas e equipamentos
-- [ ] Promoção de utilizadores a administrador
-- [ ] Validação de certificações
+- [ ] Alteração da palavra-passe pelo próprio utilizador
+- [ ] Recuperação de palavra-passe
 
 ---
 
@@ -263,14 +275,25 @@ Algumas regras não podem ser impostas apenas com restrições SQL e são verifi
 8. Dashboard por papel, com o resumo do membro. O `index.php` passa a redirecionar para o login ou para a dashboard.
 9. Proteção da pasta `database/` (`.htaccess`) e do `init.php` (só linha de comandos).
 10. Revisão da separação estrutura/apresentação: elementos semânticos em vez de `<div>`, texto em maiúsculas feito com CSS e não no HTML, CSS reorganizado com variáveis e sem regras duplicadas.
+11. Inscrição e cancelamento de aulas, com regras de vagas, horário e transação.
+12. Personal training (marcação, confirmação, conclusão), avaliações físicas, planos de treino e certificações.
+13. Área de administração: utilizadores e papéis, aulas, salas, equipamentos e validação de certificações.
+14. Revisão do design: tokens de cor com contraste mínimo WCAG AA (4.5:1), componentes comuns (botões, tabelas, estados) e dashboard sem cartões «Em desenvolvimento».
+15. Simplificação da estrutura: páginas de membro, treinador e administrador reunidas em `membro.php`, `treinador.php` e `admin.php` com separadores; actions novas reunidas em `action_gestao.php`; funções de base de dados novas reunidas em `database/gestao.php`.
+16. Funcionalidades que faltavam: filtros de aulas, avaliação de aulas, perfis de treinadores, estado dos equipamentos, perfil com fotografia.
+17. Administração: editar e cancelar aulas (`cancelada` em `Aula`), ativar/desativar contas (`ativo` em `Utilizador`), papéis atualizados em cada pedido.
+18. Código: planos de treino com dono (`idTreinador` em `PlanoTreino`), ligação PDO única por pedido, campos de formulário em `fieldset`/`p` em vez de `div`, cores soltas passadas para variáveis CSS.
+19. Dados de teste com datas relativas (`date('now', '+3 days')`), para haver sempre aulas e sessões futuras.
 
 ---
 
 ## Notas
 
+- As datas dos dados de teste são relativas ao dia em que o `biogym.db` é criado. **Recriar a base de dados (passo 4) no próprio dia da entrega**, antes de gerar o ZIP, para haver aulas futuras.
+- Esta versão alterou o esquema (`Utilizador.ativo`, `Aula.cancelada`, `PlanoTreino.idTreinador`): quem tiver um `biogym.db` antigo tem de o recriar com o passo 4.
+- O código não usa as extensões `mbstring` nem `gd`, que podem não existir na imagem Docker.
 - A imagem Docker usa **PHP 7.3**, por isso não são usadas funcionalidades de versões posteriores (`fn() =>`, `match`, `str_contains`, `?->`, argumentos com nome).
 - **Antes da entrega final:**
   - criar o `biogym.db` com o comando do passo 4 e incluí-lo no ZIP, já que o professor só deve precisar de correr o `docker run`;
-  - remover os cartões "Em desenvolvimento" da dashboard que não tenham sido implementados;
   - validar o HTML de cada página em [validator.w3.org](https://validator.w3.org/) e o CSS em [jigsaw.w3.org/css-validator](https://jigsaw.w3.org/css-validator/).
 - Se aparecer o erro *"attempt to write a readonly database"*, a pasta `database/` (e não só o ficheiro `.db`) tem de ter permissões de escrita dentro do container.
