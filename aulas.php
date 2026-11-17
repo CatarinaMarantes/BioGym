@@ -16,13 +16,11 @@ $niveis = array(
 drawHeader('Aulas');
 ?>
 
-<section class="cabecalho-aulas">
-    <div>
-        <span class="subtitulo">BIOGYM · ATIVIDADES</span>
-        <h1>Explora as nossas aulas</h1>
-        <p>Encontra a atividade ideal para ti.</p>
-    </div>
-</section>
+<header class="cabecalho-pagina">
+    <p class="etiqueta">BioGym · Atividades</p>
+    <h1>Explora as nossas aulas</h1>
+    <p>Encontra a atividade ideal para ti.</p>
+</header>
 
 <?php if (empty($aulas)) { ?>
 
@@ -30,77 +28,51 @@ drawHeader('Aulas');
 
 <?php } else { ?>
 
-    <div class="grelha-aulas">
+    <section class="grelha-aulas">
 
         <?php foreach ($aulas as $aula) {
-            $vagasDisponiveis = max(
-                0,
-                $aula['vagas'] - $aula['totalInscritos']
-            );
+            $vagasDisponiveis = max(0, $aula['vagas'] - $aula['totalInscritos']);
         ?>
 
-            
-    <article class="cartao-aula">
+            <article class="cartao-aula">
 
-        <div class="topo-cartao">
-            <h2>
-                <?= htmlspecialchars($aula['modalidade']) ?>
-            </h2>
+                <header>
+                    <h2><?= htmlspecialchars($aula['modalidade']) ?></h2>
+                    <span class="etiqueta-nivel"><?= htmlspecialchars($niveis[$aula['nivel']]) ?></span>
+                </header>
 
-            <span class="etiqueta-nivel">
-                <?= htmlspecialchars($niveis[$aula['nivel']]) ?>
-            </span>
-        </div>
+                <dl>
+                    <div>
+                        <dt>Data</dt>
+                        <dd><time datetime="<?= htmlspecialchars($aula['data']) ?>"><?= date('d/m/Y', strtotime($aula['data'])) ?></time></dd>
+                    </div>
+                    <div>
+                        <dt>Horário</dt>
+                        <dd><?= htmlspecialchars($aula['horaInicio']) ?>–<?= htmlspecialchars($aula['horaFim']) ?></dd>
+                    </div>
+                    <div>
+                        <dt>Treinador</dt>
+                        <dd><?= htmlspecialchars($aula['treinador']) ?></dd>
+                    </div>
+                    <div>
+                        <dt>Sala</dt>
+                        <dd><?= htmlspecialchars($aula['sala']) ?></dd>
+                    </div>
+                </dl>
 
-        <div class="detalhes-aula">
+                <footer>
+                    <?php if ($vagasDisponiveis > 0) { ?>
+                        <span class="vagas-disponiveis"><?= $vagasDisponiveis ?> vagas disponíveis</span>
+                    <?php } else { ?>
+                        <span class="sem-vagas">Aula lotada</span>
+                    <?php } ?>
+                </footer>
 
-            <p>
-                <strong>Data</strong>
-                <span>
-                    <?= date('d/m/Y', strtotime($aula['data'])) ?>
-                </span>
-            </p>
-
-            <p>
-                <strong>Horário</strong>
-                <span>
-                    <?= htmlspecialchars($aula['horaInicio']) ?>
-                    –
-                    <?= htmlspecialchars($aula['horaFim']) ?>
-                </span>
-            </p>
-
-            <p>
-                <strong>Treinador</strong>
-                <span>
-                    <?= htmlspecialchars($aula['treinador']) ?>
-                </span>
-            </p>
-
-            <p>
-                <strong>Sala</strong>
-                <span>
-                    <?= htmlspecialchars($aula['sala']) ?>
-                </span>
-            </p>
-
-        </div>
-
-        <div class="rodape-cartao">
-            <?php if ($vagasDisponiveis > 0) { ?>
-                <span class="vagas-disponiveis">
-                    <?= $vagasDisponiveis ?> vagas disponíveis
-                </span>
-            <?php } else { ?>
-                <span class="sem-vagas">Aula lotada</span>
-            <?php } ?>
-        </div>
-
-    </article>
+            </article>
 
         <?php } ?>
 
-    </div>
+    </section>
 
 <?php } ?>
 

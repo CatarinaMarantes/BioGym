@@ -42,22 +42,22 @@ INSERT INTO Certificacao (idTreinador, idModalidade, nome, entidadeEmissora, dat
 (2, 3, 'Instrutor de Indoor Cycling', 'Schwinn Fitness', '2024-02-12', 1, '2024-02-20'),
 (3, 2, 'Instrutor Certificado de Hatha Yoga', 'Yoga Alliance', '2022-11-20', 1, '2022-11-25');
 
--- Aulas
-INSERT INTO Aula
-    (id, data, horaInicio, horaFim, nivel, vagas, idModalidade, idSala, idTreinador)
-VALUES
-    (3, '2026-12-01', '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3),
-
-    (4, '2026-12-02', '18:30', '19:30', 'INTERMEDIO', 20, 3, 3, 2),
-
-    (5, '2026-12-03', '10:00', '11:00', 'AVANCADO', 30, 1, 1, 2),
-
-    (6, '2026-12-04', '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3);
+-- Aulas (1 e 2 já decorreram, para testar avaliações; 3 a 6 são futuras)
+INSERT INTO Aula (id, data, horaInicio, horaFim, nivel, vagas, idModalidade, idSala, idTreinador) VALUES
+(1, '2026-11-10', '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3),
+(2, '2026-11-11', '18:30', '19:30', 'INTERMEDIO', 20, 3, 3, 2),
+(3, '2026-12-01', '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3),
+(4, '2026-12-02', '18:30', '19:30', 'INTERMEDIO', 20, 3, 3, 2),
+(5, '2026-12-03', '10:00', '11:00', 'AVANCADO', 30, 1, 1, 2),
+(6, '2026-12-04', '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3);
 
 -- Inscrições em Aulas
 INSERT INTO Inscricao (idMembro, idAula, dataInscricao, estado, notaAula, notaTreinador, comentario) VALUES
-(4, 1, '2026-11-07 10:00', 'ATIVA', NULL, NULL, NULL),
-(5, 2, '2026-11-08 14:20', 'ATIVA', NULL, NULL, NULL);
+(4, 1, '2026-11-07 10:00', 'ATIVA', 5, 5, 'Excelente aula para quem está a começar.'),
+(5, 2, '2026-11-08 14:20', 'ATIVA', 4, 5, NULL),
+(4, 5, '2026-11-15 18:00', 'ATIVA', NULL, NULL, NULL),
+(5, 4, '2026-11-16 09:30', 'ATIVA', NULL, NULL, NULL),
+(5, 3, '2026-11-16 09:35', 'CANCELADA', NULL, NULL, NULL);
 
 -- Planos de Treino e Itens
 INSERT INTO PlanoTreino (id, nome, objetivo, frequenciaSemanal, duracaoSemanas) VALUES
@@ -73,4 +73,6 @@ INSERT INTO AvaliacaoFisica (id, data, peso, altura, percentagemGordura, perimet
 
 -- Sessões de Personal Training (PT)
 INSERT INTO SessaoPT (id, data, horaInicio, horaFim, estado, idMembro, idTreinador) VALUES
-(1, '2026-11-12', '11:00', '12:00', 'CONFIRMADA', 4, 2);
+(1, '2026-11-12', '11:00', '12:00', 'CONCLUIDA', 4, 2),
+(2, '2026-12-05', '11:00', '12:00', 'CONFIRMADA', 4, 2),
+(3, '2026-12-07', '17:00', '18:00', 'PENDENTE', 5, 3);
