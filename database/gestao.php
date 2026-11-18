@@ -358,7 +358,7 @@ function criarSala($db, $nome, $capacidade) {
 
 function getEquipamentos($db) {
     return $db->query('
-        SELECT Equipamento.id, Equipamento.nome, Equipamento.estado, Sala.nome AS sala
+        SELECT Equipamento.id, Equipamento.nome, Equipamento.estado, Equipamento.idSala, Sala.nome AS sala
         FROM Equipamento
         LEFT JOIN Sala ON Equipamento.idSala = Sala.id
         ORDER BY Equipamento.nome
@@ -380,5 +380,46 @@ function criarEquipamento($db, $nome, $estado, $idSala) {
 function atualizarEstadoEquipamento($db, $idEquipamento, $estado) {
     $stmt = $db->prepare('UPDATE Equipamento SET estado = ? WHERE id = ?');
     $stmt->execute(array($estado, $idEquipamento));
+    return $stmt->rowCount() > 0 ? null : 'Equipamento não encontrado.';
+}
+
+
+function getSala($db, $idSala) {
+    $stmt = $db->prepare('SELECT * FROM Sala WHERE id = ?');
+    $stmt->execute(array($idSala));
+    return $stmt->fetch();
+}
+
+function editarSala($db, $idSala, $nome, $capacidade) {
+    return emTransacao($db, function () use ($db, $idSala, $nome, $capacidade) {
+        if (!getSala($db, $idSala)) return 'A sala não existe.';
+
+        $stmt = $db->prepare('SELECT 1 FROM Sala WHERE nome = ? AND id <> ?');
+        $stmt->execute(array($nome, $idSala));
+        if ($stmt->fetch()) return 'Já existe uma sala com esse nome.';
+
+        // Não deixar baixar a capacidade abaixo das vagas de aulas futuras (regra do validarAula)
+        $stmt = $db->prepare('SELECT COALESCE(MAX(vagas), 0) FROM Aula WHERE idSala = ? AND cancelada = 0 AND data >= ?');
+        $stmt->execute(array($idSala, date('Y-m-d')));
+        $maxVagas = (int) $stmt->fetchColumn();
+        if ($capacidade < $maxVagas) {
+            return 'Há aulas futuras nesta sala com ' . $maxVagas . ' vagas: a capacidade não pode ser inferior.';
+        }
+
+        $stmt = $db->prepare('UPDATE Sala SET nome = ?, capacidade = ? WHERE id = ?');
+        $stmt->execute(array($nome, $capacidade, $idSala));
+        return null;
+    });
+}
+
+// $idSala null = retirar o equipamento da sala
+function mudarSalaEquipamento($db, $idEquipamento, $idSala) {
+    if ($idSala !== null) {
+        $stmt = $db->prepare('SELECT 1 FROM Sala WHERE id = ?');
+        $stmt->execute(array($idSala));
+        if (!$stmt->fetch()) return 'Sala inválida.';
+    }
+    $stmt = $db->prepare('UPDATE Equipamento SET idSala = ? WHERE id = ?');
+    $stmt->execute(array($idSala, $idEquipamento));
     return $stmt->rowCount() > 0 ? null : 'Equipamento não encontrado.';
 }

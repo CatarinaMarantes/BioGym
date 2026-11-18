@@ -16,7 +16,7 @@ $op = iniciarOperacao(array(
     'avaliacao' => 'TREINADOR', 'plano' => 'TREINADOR', 'exercicio' => 'TREINADOR', 'registar' => 'TREINADOR',
     // administrador
     'criar' => 'ADMIN', 'editar_aula' => 'ADMIN', 'cancelar_aula' => 'ADMIN', 'apagar' => 'ADMIN',
-    'validar' => 'ADMIN', 'rejeitar' => 'ADMIN',
+    'validar' => 'ADMIN', 'rejeitar' => 'ADMIN','editar_sala' => 'ADMIN', 'equipamento_sala' => 'ADMIN',
     'papel' => 'ADMIN', 'desativar' => 'ADMIN', 'ativar' => 'ADMIN', 'sala' => 'ADMIN', 'equipamento' => 'ADMIN', 'equipamento_estado' => 'ADMIN'
 ));
 
@@ -227,7 +227,7 @@ if (in_array($op, array('registar', 'validar', 'rejeitar'))) {
 // ---------------------------------------------------------------------
 // Utilizadores, salas e equipamentos
 // ---------------------------------------------------------------------
-if (in_array($op, array('papel', 'desativar', 'ativar', 'sala', 'equipamento', 'equipamento_estado'))) {
+if (in_array($op, array('papel', 'desativar', 'ativar', 'sala', 'editar_sala', 'equipamento', 'equipamento_sala', 'equipamento_estado'))) {
     $estadosValidos = array('DISPONIVEL', 'EM_USO', 'EM_MANUTENCAO');
 
     if ($op === 'papel') {
@@ -260,6 +260,28 @@ if (in_array($op, array('papel', 'desativar', 'ativar', 'sala', 'equipamento', '
         if ($capacidade < 1) $erros[] = 'A capacidade deve ser pelo menos 1.';
         terminarSeErros($erros, $destino);
         terminar(criarSala($db, $nome, $capacidade), 'Sala criada.', $destino);
+    }
+
+    if ($op === 'editar_sala') {
+        $idSala     = postInt('idSala');
+        $nome       = post('nome');
+        $capacidade = postInt('capacidade');
+        $destinoEdicao = $destino . '&editar_sala=' . $idSala;
+
+        $erros = array();
+        if ($nome === '') $erros[] = 'O nome da sala é obrigatório.';
+        if ($capacidade < 1) $erros[] = 'A capacidade deve ser pelo menos 1.';
+        terminarSeErros($erros, $destinoEdicao);
+
+        $erro = editarSala($db, $idSala, $nome, $capacidade);
+        if ($erro !== null) terminar($erro, '', $destinoEdicao);
+        terminar(null, 'Sala atualizada.', $destino);
+    }
+
+    if ($op === 'equipamento_sala') {
+        $idSala = postInt('idSala'); // 0 = sem sala
+        terminar(mudarSalaEquipamento($db, postInt('idEquipamento'), $idSala === 0 ? null : $idSala),
+                 'Equipamento movido.', $destino);
     }
 
     $estado = post('estado');

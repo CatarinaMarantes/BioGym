@@ -182,6 +182,12 @@ $salas = getSalas($db);
 $equipamentos = getEquipamentos($db);
 
 $estadosEquipamento = array('DISPONIVEL' => 'Disponível', 'EM_USO' => 'Em uso', 'EM_MANUTENCAO' => 'Em manutenção');
+
+// ?editar_sala=ID mostra o formulário já preenchido com essa sala
+$editarSala = null;
+if (isset($_GET['editar_sala']) && is_string($_GET['editar_sala']) && ctype_digit($_GET['editar_sala'])) {
+    $editarSala = getSala($db, (int) $_GET['editar_sala']);
+}
 ?>
 
 <section class="bloco">
@@ -196,6 +202,7 @@ $estadosEquipamento = array('DISPONIVEL' => 'Disponível', 'EM_USO' => 'Em uso',
                         <th>Nome</th>
                         <th>Capacidade</th>
                         <th>Equipamentos</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -204,6 +211,7 @@ $estadosEquipamento = array('DISPONIVEL' => 'Disponível', 'EM_USO' => 'Em uso',
                             <td><?= e($s['nome']) ?></td>
                             <td><?= e($s['capacidade']) ?> lugares</td>
                             <td><?= e($s['totalEquipamentos']) ?></td>
+                            <td><a href="/admin.php?sec=espacos&amp;editar_sala=<?= e($s['id']) ?>" class="botao-secundario">Editar</a></td>
                         </tr>
                     <?php } ?>
                 </tbody>
@@ -211,6 +219,29 @@ $estadosEquipamento = array('DISPONIVEL' => 'Disponível', 'EM_USO' => 'Em uso',
         </div>
     <?php } ?>
 </section>
+
+<?php if ($editarSala) { ?>
+<section class="formulario largo">
+    <h2>Editar sala</h2>
+    <form action="/actions/action_gestao.php" method="post">
+        <?php drawCsrf(); ?>
+        <input type="hidden" name="op" value="editar_sala">
+        <input type="hidden" name="idSala" value="<?= e($editarSala['id']) ?>">
+        <fieldset class="campos">
+            <p>
+                <label for="editNomeSala">Nome</label>
+                <input type="text" id="editNomeSala" name="nome" value="<?= e($editarSala['nome']) ?>" required>
+            </p>
+            <p>
+                <label for="editCapacidade">Capacidade</label>
+                <input type="number" id="editCapacidade" name="capacidade" min="1" value="<?= e($editarSala['capacidade']) ?>" required>
+            </p>
+        </fieldset>
+        <button type="submit">Guardar alterações</button>
+        <a href="/admin.php?sec=espacos" class="botao-secundario">Cancelar</a>
+    </form>
+</section>
+<?php } ?>
 
 <section class="formulario largo">
     <h2>Nova sala</h2>
@@ -244,6 +275,7 @@ $estadosEquipamento = array('DISPONIVEL' => 'Disponível', 'EM_USO' => 'Em uso',
                         <th>Sala</th>
                         <th>Estado</th>
                         <th>Alterar estado</th>
+                        <th>Mover para sala</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -265,6 +297,21 @@ $estadosEquipamento = array('DISPONIVEL' => 'Disponível', 'EM_USO' => 'Em uso',
                                         <?php } ?>
                                     </select>
                                     <button type="submit" class="botao-secundario">Guardar</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="/actions/action_gestao.php" method="post" class="formulario-linha">
+                                    <?php drawCsrf(); ?>
+                                    <input type="hidden" name="op" value="equipamento_sala">
+                                    <input type="hidden" name="idEquipamento" value="<?= e($q['id']) ?>">
+                                    <label for="sala<?= e($q['id']) ?>" class="nota-tabela">Nova sala</label>
+                                    <select id="sala<?= e($q['id']) ?>" name="idSala">
+                                        <option value="0"<?= $q['idSala'] === null ? ' selected' : '' ?>>Sem sala</option>
+                                        <?php foreach ($salas as $sl) { ?>
+                                            <option value="<?= e($sl['id']) ?>"<?= (int) $q['idSala'] === (int) $sl['id'] ? ' selected' : '' ?>><?= e($sl['nome']) ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <button type="submit" class="botao-secundario">Mover</button>
                                 </form>
                             </td>
                         </tr>
