@@ -87,8 +87,32 @@ Deve aparecer `Base de dados criada. Utilizadores: 5`. O script apaga o `biogym.
 
 A palavra-passe de **todas** as contas é `password123`.
 
-| Nome | Email | Papel(éis) |
-|---|---|---|
+| Nome | Email | Papel(éis) | Para testar |
+|---|---|---|---|
+| Rui Almeida | admin@biogym.pt | Administrador | Gestão de aulas, utilizadores, salas e equipamentos; validar as 3 certificações pendentes |
+| Helena Duarte | helena.duarte@biogym.pt | Administradora | Segundo administrador |
+| Carlos Silva | carlos.silva@biogym.pt | Treinador (Musculação, Spinning, Treino Funcional) | Aulas, sessões de PT confirmadas, planos e avaliações físicas |
+| Ana Rocha | ana.rocha@biogym.pt | Treinadora (Yoga, Pilates) + Membro | Vista com dois papéis |
+| Pedro Costa | pedro.costa@biogym.pt | Treinador (Treino Funcional, Boxe) | Certificação de HIIT por validar |
+| Sofia Ferreira | sofia.ferreira@biogym.pt | Treinadora (Pilates, Zumba) | Sessão de PT já decorrida por concluir; aula cancelada |
+| Tiago Lopes | tiago.lopes@biogym.pt | Treinador (Spinning, HIIT) | Aula lotada; certificação de Musculação por validar |
+| Beatriz Nunes | beatriz.nunes@biogym.pt | Treinadora | Recém-chegada: só tem uma certificação por validar, sem aulas |
+| João Mendes | joao.mendes@gmail.com | Membro | Inscrições, aulas por avaliar, PT e 4 avaliações físicas (evolução) |
+| Maria Santos | maria.santos@gmail.com | Membro | Sessão de PT pendente, 3 avaliações físicas |
+| Diogo Martins | diogo.martins@hotmail.com | Membro | Plano de treino funcional e avaliações |
+| André Fernandes | andre.fernandes@gmail.com | Membro | **Conta desativada**: o login é recusado |
+
+Há ainda mais 11 membros (Rita Oliveira, Miguel Antunes, Catarina Sousa, Leonor Pereira, Bruno Ribeiro, Joana Teixeira, Mariana Lopes, Ricardo Neves, Patrícia Gomes, Hugo Correia e Sara Moreira), com inscrições e avaliações, para as aulas e os perfis dos treinadores terem dados realistas.
+
+### Resumo dos dados de teste
+
+- **23 utilizadores**: 2 administradores, 6 treinadores e 16 membros (uma treinadora também é membro; um membro tem a conta desativada).
+- **9 modalidades** (Alongamentos ainda não tem aulas nem treinadores), **6 salas** e **19 equipamentos** em vários estados, um deles em armazém, sem sala.
+- **42 aulas**: 12 já decorridas, com avaliações, e 30 futuras, até três meses depois da criação da base de dados. Uma está lotada, uma tem só uma vaga livre e uma foi cancelada.
+- **74 inscrições** (ativas e canceladas), **14 sessões de PT** em todos os estados, **7 planos de treino** com 33 exercícios e **18 avaliações físicas**.
+- Os dados respeitam as regras da aplicação: vagas dentro da capacidade da sala, sem salas, treinadores ou membros com horários sobrepostos, treinadores só dão aulas de modalidades em que têm certificação validada e cada avaliação física usa um plano do treinador que a fez.
+
+---|---|---|
 | Rui Almeida | admin@biogym.pt | Administrador |
 | Carlos Silva | carlos.silva@biogym.pt | Treinador (Musculação, Spinning) |
 | Ana Rocha | ana.rocha@biogym.pt | Treinadora (Yoga) + Membro |
@@ -289,7 +313,7 @@ Algumas regras não podem ser impostas apenas com restrições SQL e são verifi
 
 ## Notas
 
-- As datas dos dados de teste são relativas ao dia em que o `biogym.db` é criado. **Recriar a base de dados (passo 4) no próprio dia da entrega**, antes de gerar o ZIP, para haver aulas futuras.
+- As datas dos dados de teste são relativas ao dia em que o `biogym.db` é criado e vão até três meses depois. **Recriar a base de dados (passo 4) no próprio dia da entrega**, antes de gerar o ZIP.
 - Esta versão alterou o esquema (`Utilizador.ativo`, `Aula.cancelada`, `PlanoTreino.idTreinador`): quem tiver um `biogym.db` antigo tem de o recriar com o passo 4.
 - O código não usa as extensões `mbstring` nem `gd`, que podem não existir na imagem Docker.
 - A imagem Docker usa **PHP 7.3**, por isso não são usadas funcionalidades de versões posteriores (`fn() =>`, `match`, `str_contains`, `?->`, argumentos com nome).
