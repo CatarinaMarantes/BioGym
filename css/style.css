@@ -236,6 +236,47 @@ body > footer p {
 
 
 /* =====================================
+   Paginação e número de resultados
+===================================== */
+
+.resultados {
+    color: var(--cor-texto-suave);
+    font-size: 14px;
+}
+
+.paginacao {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin: 32px 0 8px;
+}
+
+.paginacao a,
+.paginacao span {
+    min-width: 2.5em;
+    padding: 0.5em 0.8em;
+    border: 1px solid var(--cor-borda);
+    border-radius: 6px;
+    background: var(--cor-cartao);
+    color: var(--cor-principal);
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+}
+
+.paginacao a:hover {
+    background: var(--cor-neutro-fundo);
+}
+
+.paginacao span[aria-current] {
+    background: var(--cor-principal);
+    border-color: var(--cor-principal);
+    color: var(--cor-texto-claro);
+}
+
+
+/* =====================================
    Etiquetas de estado
 ===================================== */
 
@@ -334,6 +375,23 @@ body > footer p {
 
 .formulario button:not(.botao):not(.botao-secundario):not(.botao-perigo):hover {
     background: var(--cor-principal-clara);
+}
+
+/* Botão de submeter ao lado de uma ligação (ex.: Filtrar / Limpar filtros) */
+.formulario .acoes {
+    align-items: center;
+    margin-top: 1.5em;
+}
+
+.formulario .acoes button:not(.botao):not(.botao-secundario):not(.botao-perigo) {
+    margin-top: 0;
+}
+
+.formulario .acoes .botao-secundario {
+    padding: 0.7em 1em;
+    border-radius: 4px;
+    font-size: 1em;
+    font-weight: normal;
 }
 
 /* Campos lado a lado nos formulários largos */

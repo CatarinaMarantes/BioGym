@@ -18,7 +18,18 @@ $filtros = array(
 );
 $temFiltros = $filtros['modalidade'] || $filtros['treinador'] || $filtros['nivel'] !== '' || $filtros['data'] !== '';
 
-$aulas = getAulasDisponiveis($db, $filtros);
+// Paginação: 9 aulas por página (3 linhas de 3 cartões)
+$porPagina = 9;
+$totalAulas = contarAulasDisponiveis($db, $filtros);
+$totalPaginas = (int) ceil($totalAulas / $porPagina);
+$pagina = paginaAtual($totalPaginas);
+$aulas = getAulasDisponiveis($db, $filtros, $pagina, $porPagina);
+
+// Filtros escolhidos, para manter nas ligações da paginação
+$parametrosFiltro = array();
+foreach ($filtros as $chave => $valor) {
+    if ($valor) $parametrosFiltro[$chave] = $valor;
+}
 $modalidades = getModalidades($db);
 $treinadores = getTreinadores($db);
 
@@ -81,6 +92,8 @@ drawCabecalhoPagina('BioGym · Atividades', 'Explora as nossas aulas', 'Encontra
 
 <?php } else { ?>
 
+    <p class="resultados"><?= $totalAulas ?> <?= $totalAulas === 1 ? 'aula encontrada' : 'aulas encontradas' ?><?= $totalPaginas > 1 ? ' · página ' . $pagina . ' de ' . $totalPaginas : '' ?></p>
+
     <section class="grelha-aulas">
 
         <?php foreach ($aulas as $aula) {
@@ -139,6 +152,8 @@ drawCabecalhoPagina('BioGym · Atividades', 'Explora as nossas aulas', 'Encontra
         <?php } ?>
 
     </section>
+
+    <?php drawPaginacao('/aulas.php', $parametrosFiltro, $pagina, $totalPaginas); ?>
 
 <?php } ?>
 

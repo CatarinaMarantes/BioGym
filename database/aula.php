@@ -49,10 +49,11 @@ function sqlAulas() {
     ";
 }
 
-// Aulas que ainda não começaram e não foram canceladas.
+// Condição WHERE das aulas que ainda não começaram e não foram canceladas,
+// com os filtros escolhidos. Devolve array(sql, parâmetros).
 // $filtros (todos opcionais): modalidade (id), nivel, data (Y-m-d), treinador (id).
-function getAulasDisponiveis($db, $filtros = array()) {
-    $sql = sqlAulas() . '
+function condicaoAulasDisponiveis($filtros) {
+    $sql = '
         WHERE (Aula.data > ? OR (Aula.data = ? AND Aula.horaInicio > ?))
           AND Aula.cancelada = 0
     ';
@@ -74,8 +75,28 @@ function getAulasDisponiveis($db, $filtros = array()) {
         $sql .= ' AND Aula.idTreinador = ?';
         $params[] = $filtros['treinador'];
     }
+    return array($sql, $params);
+}
 
-    $stmt = $db->prepare($sql . ' ORDER BY Aula.data ASC, Aula.horaInicio ASC');
+// Número de aulas disponíveis com os filtros (para a paginação)
+function contarAulasDisponiveis($db, $filtros = array()) {
+    list($where, $params) = condicaoAulasDisponiveis($filtros);
+    $stmt = $db->prepare('SELECT COUNT(*) FROM Aula ' . $where);
+    $stmt->execute($params);
+    return (int) $stmt->fetchColumn();
+}
+
+// Uma página de aulas disponíveis, por ordem de data e hora.
+// $porPagina = 0 devolve todas.
+function getAulasDisponiveis($db, $filtros = array(), $pagina = 1, $porPagina = 0) {
+    list($where, $params) = condicaoAulasDisponiveis($filtros);
+    $sql = sqlAulas() . $where . ' ORDER BY Aula.data ASC, Aula.horaInicio ASC';
+    if ($porPagina > 0) {
+        $sql .= ' LIMIT ? OFFSET ?';
+        $params[] = $porPagina;
+        $params[] = ($pagina - 1) * $porPagina;
+    }
+    $stmt = $db->prepare($sql);
     $stmt->execute($params);
     return $stmt->fetchAll();
 }

@@ -6,12 +6,12 @@ require_once __DIR__ . '/../database/utilizador.php';
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') redirecionar('/registo.php');
 verificarCsrf();
 
-$nome           = trim($_POST['nome'] ?? '');
-$email          = trim($_POST['email'] ?? '');
-$telemovel      = trim($_POST['telemovel'] ?? '');
-$dataNascimento = $_POST['dataNascimento'] ?? '';
-$password       = $_POST['password'] ?? '';
-$confirmacao    = $_POST['confirmacao'] ?? '';
+$nome           = post('nome');
+$email          = post('email');
+$telemovel      = post('telemovel');
+$dataNascimento = post('dataNascimento');
+$password       = (isset($_POST['password']) && is_string($_POST['password']) ? $_POST['password'] : '');
+$confirmacao    = (isset($_POST['confirmacao']) && is_string($_POST['confirmacao']) ? $_POST['confirmacao'] : '');
 
 // Validação no servidor: a validação do HTML pode ser contornada
 $erros = array();
@@ -27,6 +27,10 @@ $db = getDatabaseConnection();
 if (empty($erros) && emailExiste($db, $email)) $erros[] = 'Já existe uma conta com esse email.';
 
 if (!empty($erros)) {
+    // Guarda o que foi escrito (nunca as palavras-passe) para repor no formulário
+    $_SESSION['formRegisto'] = array(
+        'nome' => $nome, 'email' => $email, 'telemovel' => $telemovel, 'dataNascimento' => $dataNascimento
+    );
     foreach ($erros as $erro) adicionarMensagem('erro', $erro);
     redirecionar('/registo.php');
 }

@@ -162,3 +162,34 @@ function drawSeparadores($pagina, $seccoes, $atual) { ?>
     <?php } ?>
 </nav>
 <?php }
+
+// Lê o número da página pedida por GET (?pagina=), entre 1 e $totalPaginas
+function paginaAtual($totalPaginas) {
+    $pagina = isset($_GET['pagina']) && is_string($_GET['pagina']) && ctype_digit($_GET['pagina']) ? (int) $_GET['pagina'] : 1;
+    return max(1, min($pagina, max(1, $totalPaginas)));
+}
+
+// Ligações de paginação. $parametros: os outros parâmetros GET a manter
+// (por exemplo, os filtros), para não se perderem ao mudar de página.
+function drawPaginacao($url, $parametros, $pagina, $totalPaginas) {
+    if ($totalPaginas <= 1) return;
+    $ligacao = function ($p) use ($url, $parametros) {
+        $parametros['pagina'] = $p;
+        return $url . '?' . http_build_query($parametros);
+    }; ?>
+<nav class="paginacao" aria-label="Páginas">
+    <?php if ($pagina > 1) { ?>
+        <a href="<?= e($ligacao($pagina - 1)) ?>" rel="prev">&larr; Anterior</a>
+    <?php } ?>
+    <?php for ($p = 1; $p <= $totalPaginas; $p++) { ?>
+        <?php if ($p === $pagina) { ?>
+            <span aria-current="page"><?= $p ?></span>
+        <?php } else { ?>
+            <a href="<?= e($ligacao($p)) ?>"><?= $p ?></a>
+        <?php } ?>
+    <?php } ?>
+    <?php if ($pagina < $totalPaginas) { ?>
+        <a href="<?= e($ligacao($pagina + 1)) ?>" rel="next">Seguinte &rarr;</a>
+    <?php } ?>
+</nav>
+<?php }

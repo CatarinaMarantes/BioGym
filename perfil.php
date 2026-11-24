@@ -11,7 +11,7 @@ $utilizador = getUtilizadorPorId($db, $_SESSION['id']);
 $temFoto = temFotografia($db, $_SESSION['id']);
 
 drawHeader('O meu perfil');
-drawCabecalhoPagina('Conta', 'O meu perfil', 'Os teus dados e a tua fotografia. O email não pode ser alterado.');
+drawCabecalhoPagina('Conta', 'O meu perfil', 'Os teus dados, a tua fotografia e a tua palavra-passe. O email não pode ser alterado.');
 ?>
 
 <section class="formulario largo">
@@ -53,6 +53,31 @@ drawCabecalhoPagina('Conta', 'O meu perfil', 'Os teus dados e a tua fotografia. 
         <?php } ?>
 
         <button type="submit">Guardar</button>
+    </form>
+</section>
+
+<section class="formulario largo">
+    <h2>Alterar palavra-passe</h2>
+
+    <form action="/actions/action_password.php" method="post">
+        <?php drawCsrf(); ?>
+
+        <label for="passwordAtual">Palavra-passe atual</label>
+        <input type="password" id="passwordAtual" name="passwordAtual" autocomplete="current-password" required>
+
+        <fieldset class="campos">
+            <p>
+                <label for="passwordNova">Nova palavra-passe</label>
+                <input type="password" id="passwordNova" name="passwordNova" minlength="8" autocomplete="new-password" required>
+            </p>
+            <p>
+                <label for="confirmacao">Confirmar nova palavra-passe</label>
+                <input type="password" id="confirmacao" name="confirmacao" minlength="8" autocomplete="new-password" required>
+            </p>
+        </fieldset>
+        <small class="ajuda">Mínimo 8 caracteres.</small>
+
+        <button type="submit">Alterar palavra-passe</button>
     </form>
 </section>
 

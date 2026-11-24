@@ -112,13 +112,6 @@ Há ainda mais 11 membros (Rita Oliveira, Miguel Antunes, Catarina Sousa, Leonor
 - **74 inscrições** (ativas e canceladas), **14 sessões de PT** em todos os estados, **7 planos de treino** com 33 exercícios e **18 avaliações físicas**.
 - Os dados respeitam as regras da aplicação: vagas dentro da capacidade da sala, sem salas, treinadores ou membros com horários sobrepostos, treinadores só dão aulas de modalidades em que têm certificação validada e cada avaliação física usa um plano do treinador que a fez.
 
----|---|---|
-| Rui Almeida | admin@biogym.pt | Administrador |
-| Carlos Silva | carlos.silva@biogym.pt | Treinador (Musculação, Spinning) |
-| Ana Rocha | ana.rocha@biogym.pt | Treinadora (Yoga) + Membro |
-| João Mendes | joao.mendes@gmail.com | Membro |
-| Maria Santos | maria.santos@gmail.com | Membro |
-
 ---
 
 ## Estrutura do projeto
@@ -130,10 +123,10 @@ html/
 ├── login.php            Login
 ├── registo.php          Registo de novo membro
 ├── dashboard.php        Painel do utilizador, com uma secção por papel
-├── aulas.php            Aulas disponíveis, com filtros e inscrição/cancelamento
-├── treinadores.php      Perfis dos treinadores (fotografia, biografia, modalidades, avaliação média)
+├── aulas.php            Aulas disponíveis, com filtros, paginação e inscrição/cancelamento
+├── treinadores.php      Perfis dos treinadores, com pesquisa por nome, filtro por modalidade e ordenação por avaliação
 ├── equipamentos.php     Estado dos equipamentos (disponível, em uso, em manutenção)
-├── perfil.php           Edição do perfil (nome, telemóvel, biografia, fotografia)
+├── perfil.php           Edição do perfil (nome, telemóvel, biografia, fotografia) e da palavra-passe
 ├── foto.php             Devolve a fotografia de perfil (só com sessão iniciada)
 ├── membro.php           (membro) Separadores: as minhas aulas, personal training, avaliações físicas, plano de treino
 ├── treinador.php        (treinador) Separadores: aulas, sessões de PT, avaliações, planos, certificações
@@ -143,6 +136,7 @@ html/
 │   ├── action_logout.php
 │   ├── action_registo.php
 │   ├── action_perfil.php   Atualização do perfil e da fotografia
+│   ├── action_password.php Alteração da palavra-passe (exige a palavra-passe atual)
 │   └── action_gestao.php   Todas as restantes operações (inscrições, PT, avaliações, planos, certificações, administração)
 ├── css/style.css        Folha de estilos (cores definidas como variáveis no início)
 ├── database/
@@ -265,11 +259,14 @@ Algumas regras não podem ser impostas apenas com restrições SQL e são verifi
 - [x] Edição do perfil, incluindo fotografia (todos os papéis)
 - [x] Administração: editar e cancelar aulas, ativar/desativar contas
 - [x] Planos de treino com dono (cada treinador só vê e edita os seus)
+- [x] Paginação da lista de aulas (9 por página), mantendo os filtros escolhidos
+- [x] Pesquisa de treinadores por nome, filtro por modalidade e ordenação por avaliação, com ligação para as aulas de cada treinador
+- [x] Alteração da palavra-passe pelo próprio utilizador (exige a atual)
+- [x] O formulário de registo mantém os dados escritos quando há um erro (exceto as palavras-passe)
 
-### Por implementar
+### Fora do âmbito
 
-- [ ] Alteração da palavra-passe pelo próprio utilizador
-- [ ] Recuperação de palavra-passe
+- [ ] Recuperação de palavra-passe por email (exigiria um servidor de email, que a imagem Docker não tem)
 
 ---
 
@@ -308,6 +305,7 @@ Algumas regras não podem ser impostas apenas com restrições SQL e são verifi
 17. Administração: editar e cancelar aulas (`cancelada` em `Aula`), ativar/desativar contas (`ativo` em `Utilizador`), papéis atualizados em cada pedido.
 18. Código: planos de treino com dono (`idTreinador` em `PlanoTreino`), ligação PDO única por pedido, campos de formulário em `fieldset`/`p` em vez de `div`, cores soltas passadas para variáveis CSS.
 19. Dados de teste com datas relativas (`date('now', '+3 days')`), para haver sempre aulas e sessões futuras.
+20. Revisão final: paginação das aulas (`LIMIT`/`OFFSET`, com a condição dos filtros partilhada entre a contagem e a listagem), pesquisa de treinadores (`LIKE` com `ESCAPE`, para que `%` e `_` sejam procurados literalmente), alteração da palavra-passe, registo que repõe os campos após um erro, resumo do membro sem aulas canceladas nem já começadas, leitura dos campos de login/registo com `post()` e remoção de código duplicado (`database/dashboard.php`).
 
 ---
 

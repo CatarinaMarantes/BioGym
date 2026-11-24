@@ -273,34 +273,61 @@ function temFotografia($db, $idUtilizador) {
 }
 
 // Perfis públicos dos treinadores ativos, com certificações validadas e avaliação média
-function getPerfisTreinadores($db) {
-    return $db->query("
-        SELECT
-            Utilizador.id,
-            Utilizador.nome,
-            Utilizador.biografia,
-            Utilizador.fotografia IS NOT NULL AS temFoto,
-            (
-                SELECT GROUP_CONCAT(Modalidade.nome, ', ')
-                FROM Certificacao
-                JOIN Modalidade ON Certificacao.idModalidade = Modalidade.id
-                WHERE Certificacao.idTreinador = Utilizador.id AND Certificacao.validada = 1
-            ) AS modalidades,
-            (
-                SELECT ROUND(AVG(Inscricao.notaTreinador), 1)
-                FROM Inscricao JOIN Aula ON Inscricao.idAula = Aula.id
-                WHERE Aula.idTreinador = Utilizador.id AND Inscricao.notaTreinador IS NOT NULL
-            ) AS mediaNota,
-            (
-                SELECT COUNT(Inscricao.notaTreinador)
-                FROM Inscricao JOIN Aula ON Inscricao.idAula = Aula.id
-                WHERE Aula.idTreinador = Utilizador.id
-            ) AS totalNotas
-        FROM Treinador
-        JOIN Utilizador ON Treinador.idUtilizador = Utilizador.id
-        WHERE Utilizador.ativo = 1
-        ORDER BY Utilizador.nome
-    ")->fetchAll();
+// Perfis dos treinadores ativos, com as modalidades validadas e a avaliação média.
+// $pesquisa: parte do nome (opcional). $idModalidade: só quem tem certificação
+// validada nessa modalidade (0 = todas). $ordem: 'nome' ou 'avaliacao'.
+function getPerfisTreinadores($db, $pesquisa = '', $idModalidade = 0, $ordem = 'nome') {
+    $sql = "
+        SELECT * FROM (
+            SELECT
+                Utilizador.id,
+                Utilizador.nome,
+                Utilizador.biografia,
+                Utilizador.fotografia IS NOT NULL AS temFoto,
+                (
+                    SELECT GROUP_CONCAT(Modalidade.nome, ', ')
+                    FROM Certificacao
+                    JOIN Modalidade ON Certificacao.idModalidade = Modalidade.id
+                    WHERE Certificacao.idTreinador = Utilizador.id AND Certificacao.validada = 1
+                ) AS modalidades,
+                (
+                    SELECT ROUND(AVG(Inscricao.notaTreinador), 1)
+                    FROM Inscricao JOIN Aula ON Inscricao.idAula = Aula.id
+                    WHERE Aula.idTreinador = Utilizador.id AND Inscricao.notaTreinador IS NOT NULL
+                ) AS mediaNota,
+                (
+                    SELECT COUNT(Inscricao.notaTreinador)
+                    FROM Inscricao JOIN Aula ON Inscricao.idAula = Aula.id
+                    WHERE Aula.idTreinador = Utilizador.id
+                ) AS totalNotas
+            FROM Treinador
+            JOIN Utilizador ON Treinador.idUtilizador = Utilizador.id
+            WHERE Utilizador.ativo = 1
+    ";
+    $params = array();
+
+    if ($pesquisa !== '') {
+        // % e _ escritos pelo utilizador são procurados literalmente
+        $sql .= " AND Utilizador.nome LIKE ? ESCAPE '\\'";
+        $params[] = '%' . addcslashes($pesquisa, '%_\\') . '%';
+    }
+    if ($idModalidade > 0) {
+        $sql .= ' AND EXISTS (
+            SELECT 1 FROM Certificacao
+            WHERE Certificacao.idTreinador = Utilizador.id
+              AND Certificacao.idModalidade = ?
+              AND Certificacao.validada = 1
+        )';
+        $params[] = $idModalidade;
+    }
+
+    $sql .= ') ORDER BY ' . ($ordem === 'avaliacao'
+        ? 'mediaNota IS NULL, mediaNota DESC, nome'
+        : 'nome');
+
+    $stmt = $db->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
 }
 
 // Resumo mostrado na dashboard do membro
@@ -312,11 +339,12 @@ function getResumoMembro($db, $idMembro) {
         JOIN Aula ON Inscricao.idAula = Aula.id
         WHERE Inscricao.idMembro = ?
           AND Inscricao.estado = \'ATIVA\'
-          AND Aula.data >= ?
+          AND Aula.cancelada = 0
+          AND (Aula.data > ? OR (Aula.data = ? AND Aula.horaInicio > ?))
     ';
 
     $stmt = $db->prepare($sql);
-    $stmt->execute(array($idMembro, date('Y-m-d')));
+    $stmt->execute(array($idMembro, date('Y-m-d'), date('Y-m-d'), date('H:i')));
     $aulas = (int) $stmt->fetchColumn();
 
     $sql = '
@@ -324,11 +352,11 @@ function getResumoMembro($db, $idMembro) {
         FROM SessaoPT
         WHERE idMembro = ?
           AND estado IN (\'PENDENTE\', \'CONFIRMADA\')
-          AND data >= ?
+          AND (data > ? OR (data = ? AND horaInicio > ?))
     ';
 
     $stmt = $db->prepare($sql);
-    $stmt->execute(array($idMembro, date('Y-m-d')));
+    $stmt->execute(array($idMembro, date('Y-m-d'), date('Y-m-d'), date('H:i')));
     $sessoes = (int) $stmt->fetchColumn();
 
     $sql = '
@@ -348,4 +376,10 @@ function getResumoMembro($db, $idMembro) {
         'sessoes' => $sessoes,
         'avaliacao' => $avaliacao
     );
+}
+
+// Muda a palavra-passe, guardando só o hash (bcrypt)
+function alterarPassword($db, $idUtilizador, $novaPassword) {
+    $stmt = $db->prepare('UPDATE Utilizador SET passwordHash = ? WHERE id = ?');
+    $stmt->execute(array(password_hash($novaPassword, PASSWORD_DEFAULT), $idUtilizador));
 }

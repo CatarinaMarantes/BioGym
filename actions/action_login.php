@@ -6,8 +6,8 @@ require_once __DIR__ . '/../database/utilizador.php';
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') redirecionar('/login.php');
 verificarCsrf();
 
-$email    = trim($_POST['email'] ?? '');
-$password = $_POST['password'] ?? '';
+$email    = post('email');
+$password = (isset($_POST['password']) && is_string($_POST['password']) ? $_POST['password'] : '');
 
 $db = getDatabaseConnection();
 $utilizador = getUtilizadorPorEmail($db, $email);
