@@ -1,76 +1,321 @@
 -- =====================================================================
 -- Dados de Teste (Seed Data)
 -- =====================================================================
+-- Palavra-passe de teste para todos os utilizadores: password123
+--
+-- As datas de aulas, inscrições, sessões e avaliações são relativas ao dia
+-- em que a base de dados é criada (init.php): há sempre aulas já decorridas
+-- (para testar avaliações) e aulas futuras até três meses depois.
 
--- Utilizadores (palavra-passe de teste para todos: 'password123')
-INSERT INTO Utilizador (id, nome, email, telemovel, passwordHash, fotografia, biografia, dataRegisto) VALUES
-(1, 'Rui Almeida', 'admin@biogym.pt', '912345678', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Administrador do sistema BioGym.', '2026-01-01'),
-(2, 'Carlos Silva', 'carlos.silva@biogym.pt', '923456789', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Especialista em musculação e treino funcional.', '2026-01-05'),
-(3, 'Ana Rocha', 'ana.rocha@biogym.pt', '934567890', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Instrutora de Yoga e Pilates.', '2026-01-06'),
-(4, 'João Mendes', 'joao.mendes@gmail.com', '965432109', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Focado em hipertrofia e condicionamento.', '2026-01-10'),
-(5, 'Maria Santos', 'maria.santos@gmail.com', '987654321', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Atleta amadora de corrida.', '2026-01-12');
+-- Utilizadores
+INSERT INTO Utilizador (id, nome, email, telemovel, passwordHash, fotografia, biografia, dataRegisto, ativo) VALUES
+(1, 'Rui Almeida', 'admin@biogym.pt', '912345678', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Administrador do sistema BioGym.', '2026-01-01', 1),
+(2, 'Carlos Silva', 'carlos.silva@biogym.pt', '923456789', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Especialista em musculação e treino funcional, com 10 anos de experiência em ginásio.', '2026-01-05', 1),
+(3, 'Ana Rocha', 'ana.rocha@biogym.pt', '934567890', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Instrutora de Yoga e Pilates. Acredita que a mobilidade é a base de qualquer treino.', '2026-01-06', 1),
+(4, 'João Mendes', 'joao.mendes@gmail.com', '965432109', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Focado em hipertrofia e condicionamento.', '2026-01-10', 1),
+(5, 'Maria Santos', 'maria.santos@gmail.com', '987654321', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Atleta amadora de corrida.', '2026-01-12', 1),
+(6, 'Pedro Costa', 'pedro.costa@biogym.pt', '926112233', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Treinador de treino funcional e boxe. Ex-atleta de competição.', '2026-02-02', 1),
+(7, 'Sofia Ferreira', 'sofia.ferreira@biogym.pt', '936223344', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Instrutora de Pilates e Zumba. Aulas cheias de energia.', '2026-02-10', 1),
+(8, 'Tiago Lopes', 'tiago.lopes@biogym.pt', '916334455', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Especialista em treino cardiovascular, Spinning e HIIT.', '2026-03-01', 1),
+(9, 'Beatriz Nunes', 'beatriz.nunes@biogym.pt', '927445566', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Professora de Yoga recém-chegada ao BioGym.', '2026-10-20', 1),
+(10, 'Rita Oliveira', 'rita.oliveira@gmail.com', '961556677', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Quero ganhar força no core e melhorar a postura.', '2026-03-15', 1),
+(11, 'Miguel Antunes', 'miguel.antunes@gmail.com', '962667788', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'A começar no ginásio depois de muitos anos parado.', '2026-04-02', 1),
+(12, 'Catarina Sousa', 'catarina.sousa@gmail.com', '913778899', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, NULL, '2026-04-18', 1),
+(13, 'Diogo Martins', 'diogo.martins@hotmail.com', '914889900', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Objetivo: perder peso e melhorar a resistência.', '2026-05-05', 1),
+(14, 'Leonor Pereira', 'leonor.pereira@gmail.com', '935990011', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Praticante de yoga há dois anos.', '2026-05-20', 1),
+(15, 'Bruno Ribeiro', 'bruno.ribeiro@sapo.pt', '916001122', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, NULL, '2026-06-01', 1),
+(16, 'Joana Teixeira', 'joana.teixeira@gmail.com', '937112233', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Adoro aulas de grupo, sobretudo Zumba.', '2026-06-14', 1),
+(17, 'André Fernandes', 'andre.fernandes@gmail.com', '918223344', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, NULL, '2026-06-30', 0),
+(18, 'Mariana Lopes', 'mariana.lopes@gmail.com', '919334455', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Corredora de trail à procura de treino complementar.', '2026-07-12', 1),
+(19, 'Ricardo Neves', 'ricardo.neves@outlook.pt', '965445566', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, NULL, '2026-08-03', 1),
+(20, 'Patrícia Gomes', 'patricia.gomes@gmail.com', '966556677', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Recuperação de uma lesão no joelho.', '2026-08-25', 1),
+(21, 'Hugo Correia', 'hugo.correia@gmail.com', '967667788', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Pratico boxe ao fim de semana.', '2026-09-09', 1),
+(22, 'Sara Moreira', 'sara.moreira@gmail.com', '968778899', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, NULL, '2026-10-01', 1),
+(23, 'Helena Duarte', 'helena.duarte@biogym.pt', '928889900', '$2y$10$klWSoqUNUOk.KojlN7NXiezoIMHDHD4zV7tcK6EEnmyTy.cEXNAqG', NULL, 'Gestora de operações do BioGym.', '2026-01-02', 1);
 
--- Atribuição de Papéis
-INSERT INTO Administrador (idUtilizador) VALUES (1);
-INSERT INTO Treinador (idUtilizador) VALUES (2), (3);
+-- Atribuição de Papéis (um utilizador pode ter vários)
+INSERT INTO Administrador (idUtilizador) VALUES (1), (23);
+INSERT INTO Treinador (idUtilizador) VALUES (2), (3), (6), (7), (8), (9);
 INSERT INTO Membro (idUtilizador, dataNascimento) VALUES
 (3, '1995-03-08'),
 (4, '1998-04-15'),
-(5, '2001-09-22');
+(5, '2001-09-22'),
+(10, '1993-07-30'),
+(11, '1979-12-05'),
+(12, '2000-02-14'),
+(13, '1988-10-09'),
+(14, '1997-05-27'),
+(15, '1985-01-19'),
+(16, '2002-08-11'),
+(17, '1991-11-23'),
+(18, '1994-06-02'),
+(19, '1983-09-17'),
+(20, '1976-04-04'),
+(21, '1999-03-21'),
+(22, '2004-12-12');
 
--- Modalidades
+-- Modalidades (Alongamentos ainda não tem aulas nem treinadores)
 INSERT INTO Modalidade (id, nome, descricao) VALUES
 (1, 'Musculação', 'Treino de força e hipertrofia muscular.'),
 (2, 'Yoga', 'Prática de flexibilidade, postura e controlo respiratório.'),
-(3, 'Spinning', 'Treino cardiovascular de alta intensidade sobre bicicleta.');
+(3, 'Spinning', 'Treino cardiovascular de alta intensidade sobre bicicleta.'),
+(4, 'Pilates', 'Fortalecimento do core, postura e controlo do movimento.'),
+(5, 'Treino Funcional', 'Exercícios com o peso do corpo e movimentos do dia a dia.'),
+(6, 'Zumba', 'Aula de dança aeróbica com ritmos latinos.'),
+(7, 'Boxe', 'Técnica de boxe, trabalho de saco e condição física.'),
+(8, 'HIIT', 'Treino intervalado de alta intensidade, curto e exigente.'),
+(9, 'Alongamentos', 'Sessões de alongamento e relaxamento muscular.');
 
 -- Salas
 INSERT INTO Sala (id, nome, capacidade) VALUES
 (1, 'Sala Principal de Musculação', 30),
 (2, 'Estúdio de Pilates/Yoga', 15),
-(3, 'Sala de Cycling', 20);
+(3, 'Sala de Cycling', 20),
+(4, 'Estúdio de Dança', 25),
+(5, 'Box de Treino Funcional', 18),
+(6, 'Sala de Combate', 12);
 
--- Equipamentos
+-- Equipamentos (o último está em armazém, sem sala)
 INSERT INTO Equipamento (id, nome, estado, idSala) VALUES
 (1, 'Passadeira Pro 500', 'DISPONIVEL', 1),
 (2, 'Bicicleta Spinning X', 'DISPONIVEL', 3),
-(3, 'Multipower Squat Rack', 'EM_MANUTENCAO', 1);
+(3, 'Multipower Squat Rack', 'EM_MANUTENCAO', 1),
+(4, 'Máquina de Remo', 'EM_USO', 1),
+(5, 'Tapetes de Yoga (conjunto)', 'DISPONIVEL', 2),
+(6, 'Passadeira Pro 500 (2)', 'EM_USO', 1),
+(7, 'Elíptica Cross 300', 'DISPONIVEL', 1),
+(8, 'Banco Ajustável', 'DISPONIVEL', 1),
+(9, 'Halteres 2–40 kg (conjunto)', 'DISPONIVEL', 1),
+(10, 'Leg Press 45º', 'EM_MANUTENCAO', 1),
+(11, 'Bicicleta Spinning X (2)', 'EM_MANUTENCAO', 3),
+(12, 'Reformer de Pilates', 'DISPONIVEL', 2),
+(13, 'Bolas de Pilates (conjunto)', 'DISPONIVEL', 2),
+(14, 'Sistema de Som', 'DISPONIVEL', 4),
+(15, 'Kettlebells 8–32 kg (conjunto)', 'EM_USO', 5),
+(16, 'Corda Naval', 'DISPONIVEL', 5),
+(17, 'Saco de Boxe Pesado', 'DISPONIVEL', 6),
+(18, 'Ringue de Treino', 'EM_MANUTENCAO', 6),
+(19, 'Remo Concept2 (reserva)', 'DISPONIVEL', NULL);
 
--- Certificações
+-- Certificações (as que têm validada = 0 aguardam validação do administrador)
 INSERT INTO Certificacao (idTreinador, idModalidade, nome, entidadeEmissora, dataObtencao, validada, dataValidacao) VALUES
 (2, 1, 'Certificado de Treinador de Musculação Nível 2', 'IFBB Portugal', '2023-05-10', 1, '2023-05-15'),
 (2, 3, 'Instrutor de Indoor Cycling', 'Schwinn Fitness', '2024-02-12', 1, '2024-02-20'),
-(3, 2, 'Instrutor Certificado de Hatha Yoga', 'Yoga Alliance', '2022-11-20', 1, '2022-11-25');
+(2, 5, 'Personal Trainer — Treino Funcional', 'NASM', '2022-09-01', 1, '2022-09-10'),
+(3, 2, 'Instrutor Certificado de Hatha Yoga', 'Yoga Alliance', '2022-11-20', 1, '2022-11-25'),
+(3, 4, 'Instrutor de Pilates Mat', 'Polestar Pilates', '2023-03-14', 1, '2023-03-20'),
+(6, 5, 'Functional Training Specialist', 'ACE', '2021-06-18', 1, '2021-06-25'),
+(6, 7, 'Treinador de Boxe Nível 1', 'Federação Portuguesa de Boxe', '2020-10-05', 1, '2020-10-12'),
+(6, 8, 'Instrutor de HIIT', 'Les Mills', '2026-10-30', 0, NULL),
+(7, 4, 'Instrutor de Pilates Clínico', 'Polestar Pilates', '2021-04-22', 1, '2021-05-01'),
+(7, 6, 'Zumba Basic 1', 'Zumba Fitness', '2022-01-15', 1, '2022-01-20'),
+(8, 3, 'Instrutor de Indoor Cycling', 'Schwinn Fitness', '2023-07-07', 1, '2023-07-12'),
+(8, 8, 'Instrutor de HIIT', 'Les Mills', '2024-03-03', 1, '2024-03-10'),
+(8, 1, 'Técnico de Exercício Físico', 'IPDJ', '2026-11-02', 0, NULL),
+(9, 2, 'Instrutora de Vinyasa Yoga', 'Yoga Alliance', '2026-09-28', 0, NULL);
 
--- Aulas
-INSERT INTO Aula
-    (id, data, horaInicio, horaFim, nivel, vagas, idModalidade, idSala, idTreinador)
-VALUES
-    (3, '2026-12-01', '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3),
+-- Aulas: 1 a 12 já decorreram; 13 a 42 são futuras.
+-- A aula 20 está lotada, a 24 tem uma só vaga livre e a 25 foi cancelada.
+INSERT INTO Aula (id, data, horaInicio, horaFim, nivel, vagas, idModalidade, idSala, idTreinador, cancelada) VALUES
+(1, date('now', '-21 days'), '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3, 0),
+(2, date('now', '-20 days'), '18:30', '19:30', 'INTERMEDIO', 20, 3, 3, 2, 0),
+(3, date('now', '-18 days'), '19:00', '20:00', 'INICIANTE', 25, 6, 4, 7, 0),
+(4, date('now', '-16 days'), '07:30', '08:30', 'AVANCADO', 18, 5, 5, 6, 0),
+(5, date('now', '-14 days'), '10:00', '11:00', 'AVANCADO', 30, 1, 1, 2, 0),
+(6, date('now', '-13 days'), '18:00', '19:00', 'INTERMEDIO', 15, 4, 2, 7, 0),
+(7, date('now', '-11 days'), '20:00', '21:00', 'INTERMEDIO', 12, 7, 6, 6, 0),
+(8, date('now', '-9 days'), '18:30', '19:15', 'AVANCADO', 20, 8, 3, 8, 0),
+(9, date('now', '-7 days'), '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3, 0),
+(10, date('now', '-5 days'), '19:00', '20:00', 'INICIANTE', 20, 3, 3, 8, 0),
+(11, date('now', '-3 days'), '10:00', '11:00', 'INTERMEDIO', 30, 1, 1, 2, 0),
+(12, date('now', '-2 days'), '18:00', '19:00', 'INICIANTE', 15, 4, 2, 3, 0),
+(13, date('now', '+1 days'), '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3, 0),
+(14, date('now', '+1 days'), '18:30', '19:30', 'INTERMEDIO', 20, 3, 3, 2, 0),
+(15, date('now', '+2 days'), '07:30', '08:30', 'INTERMEDIO', 18, 5, 5, 6, 0),
+(16, date('now', '+2 days'), '19:00', '20:00', 'INICIANTE', 25, 6, 4, 7, 0),
+(17, date('now', '+3 days'), '10:00', '11:00', 'AVANCADO', 30, 1, 1, 2, 0),
+(18, date('now', '+3 days'), '18:00', '19:00', 'INTERMEDIO', 15, 4, 2, 7, 0),
+(19, date('now', '+4 days'), '20:00', '21:00', 'INICIANTE', 12, 7, 6, 6, 0),
+(20, date('now', '+4 days'), '18:30', '19:15', 'AVANCADO', 4, 8, 3, 8, 0),
+(21, date('now', '+5 days'), '09:00', '10:00', 'INTERMEDIO', 15, 2, 2, 3, 0),
+(22, date('now', '+6 days'), '10:00', '11:00', 'INICIANTE', 30, 1, 1, 2, 0),
+(23, date('now', '+7 days'), '19:00', '20:00', 'INTERMEDIO', 20, 3, 3, 8, 0),
+(24, date('now', '+8 days'), '18:00', '19:00', 'AVANCADO', 6, 4, 2, 3, 0),
+(25, date('now', '+8 days'), '19:30', '20:30', 'INICIANTE', 25, 6, 4, 7, 1),
+(26, date('now', '+9 days'), '07:30', '08:30', 'AVANCADO', 18, 5, 5, 2, 0),
+(27, date('now', '+10 days'), '20:00', '21:00', 'AVANCADO', 12, 7, 6, 6, 0),
+(28, date('now', '+11 days'), '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3, 0),
+(29, date('now', '+12 days'), '18:30', '19:15', 'INTERMEDIO', 20, 8, 3, 8, 0),
+(30, date('now', '+14 days'), '10:00', '11:00', 'INTERMEDIO', 30, 1, 1, 2, 0),
+(31, date('now', '+18 days'), '09:00', '10:00', 'INICIANTE', 15, 4, 2, 7, 0),
+(32, date('now', '+21 days'), '18:30', '19:30', 'AVANCADO', 20, 3, 3, 2, 0),
+(33, date('now', '+25 days'), '19:00', '20:00', 'INTERMEDIO', 25, 6, 4, 7, 0),
+(34, date('now', '+28 days'), '07:30', '08:30', 'INICIANTE', 18, 5, 5, 6, 0),
+(35, date('now', '+32 days'), '10:00', '11:00', 'INICIANTE', 30, 1, 1, 2, 0),
+(36, date('now', '+35 days'), '09:00', '10:00', 'AVANCADO', 15, 2, 2, 3, 0),
+(37, date('now', '+42 days'), '20:00', '21:00', 'INTERMEDIO', 12, 7, 6, 6, 0),
+(38, date('now', '+49 days'), '18:30', '19:15', 'INICIANTE', 20, 8, 3, 8, 0),
+(39, date('now', '+56 days'), '18:00', '19:00', 'INTERMEDIO', 15, 4, 2, 3, 0),
+(40, date('now', '+63 days'), '10:00', '11:00', 'AVANCADO', 30, 1, 1, 2, 0),
+(41, date('now', '+75 days'), '19:00', '20:00', 'INICIANTE', 25, 6, 4, 7, 0),
+(42, date('now', '+90 days'), '09:00', '10:00', 'INTERMEDIO', 15, 2, 2, 3, 0);
 
-    (4, '2026-12-02', '18:30', '19:30', 'INTERMEDIO', 20, 3, 3, 2),
-
-    (5, '2026-12-03', '10:00', '11:00', 'AVANCADO', 30, 1, 1, 2),
-
-    (6, '2026-12-04', '09:00', '10:00', 'INICIANTE', 15, 2, 2, 3);
-
--- Inscrições em Aulas
+-- Inscrições em Aulas (com avaliações nas aulas já decorridas)
 INSERT INTO Inscricao (idMembro, idAula, dataInscricao, estado, notaAula, notaTreinador, comentario) VALUES
-(4, 1, '2026-11-07 10:00', 'ATIVA', NULL, NULL, NULL),
-(5, 2, '2026-11-08 14:20', 'ATIVA', NULL, NULL, NULL);
+(4, 1, datetime('now', '-25 days'), 'ATIVA', 5, 5, 'Excelente para quem está a começar.'),
+(14, 1, datetime('now', '-24 days'), 'ATIVA', 5, 5, 'A professora corrige a postura com muita atenção.'),
+(10, 1, datetime('now', '-23 days'), 'ATIVA', 4, 5, NULL),
+(20, 1, datetime('now', '-23 days'), 'ATIVA', NULL, NULL, NULL),
+(12, 1, datetime('now', '-26 days'), 'CANCELADA', NULL, NULL, NULL),
+(5, 2, datetime('now', '-23 days'), 'ATIVA', 4, 5, 'Muito intensa, adorei a música!'),
+(18, 2, datetime('now', '-22 days'), 'ATIVA', 3, 4, 'Boa aula, mas a sala estava um pouco quente.'),
+(13, 2, datetime('now', '-21 days'), 'ATIVA', 4, 4, NULL),
+(15, 2, datetime('now', '-21 days'), 'ATIVA', NULL, NULL, NULL),
+(16, 3, datetime('now', '-24 days'), 'ATIVA', 5, 5, 'Divertidíssima, passou a hora a voar.'),
+(12, 3, datetime('now', '-22 days'), 'ATIVA', 5, 4, 'Ótima energia da professora.'),
+(22, 3, datetime('now', '-20 days'), 'ATIVA', 4, 5, NULL),
+(3, 3, datetime('now', '-21 days'), 'ATIVA', 5, 5, NULL),
+(13, 4, datetime('now', '-18 days'), 'ATIVA', 4, 5, 'Treino exigente e bem estruturado.'),
+(21, 4, datetime('now', '-17 days'), 'ATIVA', 5, 5, NULL),
+(4, 5, datetime('now', '-17 days'), 'ATIVA', 4, 5, 'Boas explicações sobre a técnica dos exercícios.'),
+(11, 5, datetime('now', '-17 days'), 'ATIVA', 3, 4, 'Gostei, mas éramos muitos para o espaço.'),
+(15, 5, datetime('now', '-16 days'), 'ATIVA', 4, 4, NULL),
+(19, 5, datetime('now', '-15 days'), 'ATIVA', NULL, NULL, NULL),
+(10, 6, datetime('now', '-17 days'), 'ATIVA', 5, 5, 'Senti o core a trabalhar como nunca.'),
+(20, 6, datetime('now', '-16 days'), 'ATIVA', 4, 5, 'Aula calma e muito bem orientada.'),
+(14, 6, datetime('now', '-15 days'), 'CANCELADA', NULL, NULL, NULL),
+(21, 7, datetime('now', '-16 days'), 'ATIVA', 5, 5, 'Aprendi muito sobre a técnica de base.'),
+(19, 7, datetime('now', '-14 days'), 'ATIVA', 4, 4, NULL),
+(18, 8, datetime('now', '-11 days'), 'ATIVA', 5, 4, 'Curta mas dura. Voltarei!'),
+(13, 8, datetime('now', '-11 days'), 'ATIVA', 4, 4, NULL),
+(4, 8, datetime('now', '-10 days'), 'ATIVA', NULL, NULL, NULL),
+(14, 9, datetime('now', '-10 days'), 'ATIVA', 5, 5, 'Saí da aula muito mais relaxada.'),
+(11, 9, datetime('now', '-9 days'), 'ATIVA', 4, 5, NULL),
+(22, 9, datetime('now', '-9 days'), 'ATIVA', NULL, NULL, NULL),
+(5, 10, datetime('now', '-7 days'), 'ATIVA', 4, 4, NULL),
+(15, 10, datetime('now', '-6 days'), 'ATIVA', NULL, NULL, NULL),
+(4, 11, datetime('now', '-5 days'), 'ATIVA', NULL, NULL, NULL),
+(11, 11, datetime('now', '-5 days'), 'ATIVA', NULL, NULL, NULL),
+(19, 11, datetime('now', '-4 days'), 'ATIVA', 4, 5, NULL),
+(10, 12, datetime('now', '-4 days'), 'ATIVA', NULL, NULL, NULL),
+(20, 12, datetime('now', '-3 days'), 'ATIVA', NULL, NULL, NULL),
+(16, 12, datetime('now', '-3 days'), 'ATIVA', 5, 5, NULL),
+(14, 13, datetime('now', '-2 days'), 'ATIVA', NULL, NULL, NULL),
+(22, 13, datetime('now', '-1 days'), 'ATIVA', NULL, NULL, NULL),
+(11, 13, datetime('now', '-1 days'), 'ATIVA', NULL, NULL, NULL),
+(5, 14, datetime('now', '-3 days'), 'ATIVA', NULL, NULL, NULL),
+(18, 14, datetime('now', '-2 days'), 'ATIVA', NULL, NULL, NULL),
+(15, 14, datetime('now', '-2 days'), 'CANCELADA', NULL, NULL, NULL),
+(13, 15, datetime('now', '-1 days'), 'ATIVA', NULL, NULL, NULL),
+(21, 15, datetime('now', '-1 days'), 'ATIVA', NULL, NULL, NULL),
+(16, 16, datetime('now', '-2 days'), 'ATIVA', NULL, NULL, NULL),
+(12, 16, datetime('now', '-2 days'), 'ATIVA', NULL, NULL, NULL),
+(3, 16, datetime('now', '-1 days'), 'ATIVA', NULL, NULL, NULL),
+(4, 17, datetime('now', '-2 days'), 'ATIVA', NULL, NULL, NULL),
+(19, 17, datetime('now', '-1 days'), 'ATIVA', NULL, NULL, NULL),
+(10, 18, datetime('now', '-1 days'), 'ATIVA', NULL, NULL, NULL),
+(20, 18, datetime('now', '-1 days'), 'ATIVA', NULL, NULL, NULL),
+(21, 19, datetime('now', '+0 days'), 'ATIVA', NULL, NULL, NULL),
+(18, 20, datetime('now', '+0 days'), 'ATIVA', NULL, NULL, NULL),
+(13, 20, datetime('now', '+0 days'), 'ATIVA', NULL, NULL, NULL),
+(4, 20, datetime('now', '+1 days'), 'ATIVA', NULL, NULL, NULL),
+(5, 20, datetime('now', '+1 days'), 'ATIVA', NULL, NULL, NULL),
+(15, 20, datetime('now', '+0 days'), 'CANCELADA', NULL, NULL, NULL),
+(14, 21, datetime('now', '+2 days'), 'ATIVA', NULL, NULL, NULL),
+(11, 22, datetime('now', '+1 days'), 'ATIVA', NULL, NULL, NULL),
+(15, 22, datetime('now', '+3 days'), 'ATIVA', NULL, NULL, NULL),
+(18, 23, datetime('now', '+5 days'), 'ATIVA', NULL, NULL, NULL),
+(10, 24, datetime('now', '-1 days'), 'ATIVA', NULL, NULL, NULL),
+(14, 24, datetime('now', '-1 days'), 'ATIVA', NULL, NULL, NULL),
+(20, 24, datetime('now', '-1 days'), 'ATIVA', NULL, NULL, NULL),
+(22, 24, datetime('now', '-1 days'), 'ATIVA', NULL, NULL, NULL),
+(12, 24, datetime('now', '-1 days'), 'ATIVA', NULL, NULL, NULL),
+(16, 25, datetime('now', '-1 days'), 'CANCELADA', NULL, NULL, NULL),
+(12, 25, datetime('now', '-1 days'), 'CANCELADA', NULL, NULL, NULL),
+(13, 26, datetime('now', '+0 days'), 'ATIVA', NULL, NULL, NULL),
+(21, 27, datetime('now', '+0 days'), 'ATIVA', NULL, NULL, NULL),
+(4, 30, datetime('now', '+0 days'), 'ATIVA', NULL, NULL, NULL),
+(5, 32, datetime('now', '+0 days'), 'ATIVA', NULL, NULL, NULL);
 
--- Planos de Treino e Itens
-INSERT INTO PlanoTreino (id, nome, objetivo, frequenciaSemanal, duracaoSemanas) VALUES
-(1, 'Hipertrofia 3 Dias', 'Ganho de massa muscular', 3, 8);
+-- Planos de Treino e Itens (cada plano pertence ao treinador que o criou)
+INSERT INTO PlanoTreino (id, nome, objetivo, frequenciaSemanal, duracaoSemanas, idTreinador) VALUES
+(1, 'Hipertrofia 3 Dias', 'Ganho de massa muscular', 3, 8, 2),
+(2, 'Mobilidade e Postura', 'Flexibilidade e prevenção de lesões', 2, 6, 3),
+(3, 'Força para Iniciantes', 'Aprender a técnica dos exercícios base', 2, 6, 2),
+(4, 'Condicionamento Funcional', 'Resistência e perda de gordura', 3, 10, 6),
+(5, 'Core e Estabilidade', 'Fortalecer o core e melhorar a postura', 2, 8, 7),
+(6, 'Resistência Cardiovascular', 'Melhorar o VO2 máx. para corrida', 3, 12, 8),
+(7, 'Perda de Peso', 'Défice calórico com treino misto', 4, 12, 8);
 
 INSERT INTO ItemPlano (id, idPlanoTreino, ordem, exercicio, series, repeticoes) VALUES
 (1, 1, 1, 'Supino Reto com Barra', 4, 10),
-(2, 1, 2, 'Agachamento Livre', 4, 12);
+(2, 1, 2, 'Agachamento Livre', 4, 12),
+(3, 1, 3, 'Remada Curvada', 4, 10),
+(4, 1, 4, 'Peso Morto', 3, 8),
+(5, 1, 5, 'Desenvolvimento com Halteres', 3, 12),
+(6, 1, 6, 'Elevações', 3, 8),
+(7, 2, 1, 'Saudação ao Sol', 3, 8),
+(8, 2, 2, 'Gato-Vaca', 3, 10),
+(9, 2, 3, 'Ponte de Glúteos', 3, 12),
+(10, 2, 4, 'Alongamento dos Isquiotibiais', 2, 5),
+(11, 3, 1, 'Agachamento com Halter', 3, 12),
+(12, 3, 2, 'Supino com Halteres', 3, 12),
+(13, 3, 3, 'Remada na Polia', 3, 12),
+(14, 3, 4, 'Prancha (segundos)', 3, 30),
+(15, 3, 5, 'Lunges', 3, 10),
+(16, 4, 1, 'Burpees', 4, 12),
+(17, 4, 2, 'Kettlebell Swing', 4, 15),
+(18, 4, 3, 'Box Jumps', 3, 10),
+(19, 4, 4, 'Corda Naval (segundos)', 4, 30),
+(20, 4, 5, 'Flexões', 3, 15),
+(21, 5, 1, 'Prancha Lateral (segundos)', 3, 30),
+(22, 5, 2, 'Dead Bug', 3, 12),
+(23, 5, 3, 'Bird Dog', 3, 10),
+(24, 5, 4, 'Hundred', 2, 10),
+(25, 6, 1, 'Intervalos na Passadeira (minutos)', 6, 2),
+(26, 6, 2, 'Bicicleta em Ritmo Constante (minutos)', 1, 20),
+(27, 6, 3, 'Saltos à Corda', 4, 50),
+(28, 6, 4, 'Step-ups', 3, 15),
+(29, 7, 1, 'Circuito de Peso Corporal', 4, 10),
+(30, 7, 2, 'Remo (minutos)', 3, 5),
+(31, 7, 3, 'Agachamento com Salto', 3, 12),
+(32, 7, 4, 'Mountain Climbers', 4, 20),
+(33, 7, 5, 'Elíptica (minutos)', 1, 25);
 
--- Avaliações Físicas
+-- Avaliações Físicas (várias por membro, para se ver a evolução)
 INSERT INTO AvaliacaoFisica (id, data, peso, altura, percentagemGordura, perimetroCintura, perimetroPeito, perimetroBraco, perimetroCoxa, idMembro, idTreinador, idPlanoTreino) VALUES
-(1, '2026-01-15', 75.5, 1.78, 16.5, 82.0, 98.0, 34.0, 56.0, 4, 2, 1);
+(1, date('now', '-120 days'), 78.2, 1.78, 19.0, 86.0, 97.0, 33.0, 57.0, 4, 2, 1),
+(2, date('now', '-90 days'), 77.0, 1.78, 17.8, 84.5, 98.0, 33.5, 57.0, 4, 2, 1),
+(3, date('now', '-60 days'), 75.5, 1.78, 16.5, 82.0, 98.0, 34.0, 56.0, 4, 2, 1),
+(4, date('now', '-30 days'), 75.9, 1.78, 15.4, 81.0, 99.5, 34.8, 57.5, 4, 2, 1),
+(5, date('now', '-100 days'), 61.0, 1.65, 24.5, 72.0, 88.0, 27.0, 54.0, 5, 8, 6),
+(6, date('now', '-50 days'), 59.8, 1.65, 23.1, 70.5, 87.5, 26.8, 53.0, 5, 8, 6),
+(7, date('now', '-10 days'), 59.1, 1.65, 22.0, 69.5, 87.0, 26.5, 52.5, 5, 8, 6),
+(8, date('now', '-45 days'), 64.3, 1.7, 27.0, 76.0, NULL, NULL, NULL, 10, 7, 5),
+(9, date('now', '-5 days'), 63.1, 1.7, 25.8, 74.0, NULL, NULL, NULL, 10, 7, 5),
+(10, date('now', '-40 days'), 82.4, 1.82, 21.5, 92.0, 101.0, 33.0, 58.0, 11, 2, 3),
+(11, date('now', '-12 days'), 81.0, 1.82, 20.4, 90.0, 101.5, 33.6, 58.0, 11, 2, 3),
+(12, date('now', '-35 days'), 90.2, 1.8, 26.0, 98.0, 106.0, 35.0, 62.0, 13, 6, 4),
+(13, date('now', '-3 days'), 87.9, 1.8, 24.6, 95.0, 105.0, 35.0, 61.0, 13, 6, 4),
+(14, date('now', '-20 days'), 55.0, 1.6, 21.0, NULL, NULL, NULL, NULL, 14, 3, 2),
+(15, date('now', '-60 days'), 98.5, 1.76, 30.2, 104.0, 110.0, 36.0, 64.0, 15, 8, 7),
+(16, date('now', '-25 days'), 95.1, 1.76, 28.7, 101.0, 108.0, 35.5, 63.0, 15, 8, 7),
+(17, date('now', '-15 days'), 58.4, 1.63, 23.5, 68.0, NULL, NULL, NULL, 16, 7, 5),
+(18, date('now', '-30 days'), 68.7, 1.72, NULL, NULL, NULL, NULL, NULL, 18, 8, 6);
 
 -- Sessões de Personal Training (PT)
 INSERT INTO SessaoPT (id, data, horaInicio, horaFim, estado, idMembro, idTreinador) VALUES
-(1, '2026-11-12', '11:00', '12:00', 'CONFIRMADA', 4, 2);
+(1, date('now', '-15 days'), '11:00', '12:00', 'CONCLUIDA', 4, 2),
+(2, date('now', '-8 days'), '11:00', '12:00', 'CONCLUIDA', 4, 2),
+(3, date('now', '-10 days'), '17:00', '18:00', 'CONCLUIDA', 13, 6),
+(4, date('now', '-6 days'), '17:00', '18:00', 'CONCLUIDA', 14, 3),
+(5, date('now', '-4 days'), '12:00', '13:00', 'CANCELADA', 15, 8),
+(6, date('now', '-1 days'), '10:00', '11:00', 'CONFIRMADA', 16, 7),
+(7, date('now', '+2 days'), '11:00', '12:00', 'CONFIRMADA', 4, 2),
+(8, date('now', '+3 days'), '17:00', '18:00', 'PENDENTE', 5, 3),
+(9, date('now', '+5 days'), '18:00', '19:00', 'CONFIRMADA', 13, 6),
+(10, date('now', '+6 days'), '12:00', '13:00', 'PENDENTE', 10, 8),
+(11, date('now', '+7 days'), '10:00', '11:00', 'PENDENTE', 12, 7),
+(12, date('now', '+9 days'), '12:00', '13:00', 'CONFIRMADA', 11, 2),
+(13, date('now', '+10 days'), '17:00', '18:00', 'PENDENTE', 19, 3),
+(14, date('now', '+12 days'), '19:00', '20:00', 'CANCELADA', 21, 6);

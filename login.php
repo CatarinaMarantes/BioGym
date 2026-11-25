@@ -9,7 +9,7 @@ drawHeader('Entrar');
 <section class="formulario">
     <h1>Entrar</h1>
     <form action="/actions/action_login.php" method="post">
-        <input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
+        <?php drawCsrf(); ?>
 
         <label for="email">Email</label>
         <input type="email" id="email" name="email" required>
