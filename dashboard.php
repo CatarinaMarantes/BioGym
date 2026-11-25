@@ -17,51 +17,176 @@ if (in_array('MEMBRO', $papeis)) {
 drawHeader('Início');
 ?>
 
-<?php drawCabecalhoPagina('Painel', $_SESSION['nome']); ?>
+<section class="painel-hero">
+
+    <div class="painel-hero-conteudo">
+
+        <p class="painel-hero-etiqueta">
+            O teu espaço de treino
+        </p>
+
+        <h1>Olá, <?= e($_SESSION['nome']) ?>!</h1>
+
+        <p class="painel-hero-descricao">
+            Cada treino é um passo em direção
+            aos teus objetivos.
+        </p>
+
+        <?php if (in_array('MEMBRO', $papeis)) { ?>
+
+            <a href="/aulas.php" class="painel-hero-botao">
+                Explorar aulas &rarr;
+            </a>
+
+        <?php } ?>
+
+    </div>
+
+    <div class="painel-hero-ilustracao" aria-hidden="true">
+        <?php drawIconePainel('treino'); ?>
+    </div>
+
+</section>
 
 <?php if (in_array('MEMBRO', $papeis)) { ?>
 
     <section class="painel-seccao">
         <header>
-            <h2>Área de membro</h2>
+            <h2>A tua atividade</h2>
         </header>
 
-        <dl class="painel-estatisticas">
+       <dl class="painel-estatisticas">
+
+            <!-- Próximas aulas -->
             <div class="painel-metrica">
-                <dt>Próximas aulas inscritas</dt>
+
+                <dt>
+                    <span class="painel-metrica-icone">
+                        <?php drawIconePainel('calendario'); ?>
+                    </span>
+
+                    Próximas aulas inscritas
+                </dt>
+
                 <dd class="valor"><?= $resumo['aulas'] ?></dd>
+
                 <dd>Inscrições ativas em aulas futuras</dd>
+
             </div>
 
+            <!-- Sessões de Personal Training -->
             <div class="painel-metrica">
-                <dt>Sessões PT agendadas</dt>
+
+                <dt>
+                    <span class="painel-metrica-icone">
+                        <?php drawIconePainel('treino'); ?>
+                    </span>
+
+                    Sessões PT agendadas
+                </dt>
+
                 <dd class="valor"><?= $resumo['sessoes'] ?></dd>
+
                 <dd>Pendentes ou confirmadas</dd>
+
             </div>
 
+            <!-- Último peso registado -->
             <div class="painel-metrica">
-                <dt>Último peso registado</dt>
+
+                <dt>
+                    <span class="painel-metrica-icone">
+                        <?php drawIconePainel('peso'); ?>
+                    </span>
+
+                    Último peso registado
+                </dt>
+
                 <?php if ($resumo['avaliacao']) { ?>
-                    <dd class="valor"><?= htmlspecialchars($resumo['avaliacao']['peso']) ?> kg</dd>
+
+                    <dd class="valor">
+                        <?= htmlspecialchars($resumo['avaliacao']['peso']) ?> kg
+                    </dd>
+
                     <dd>
                         Avaliação de
-                        <time datetime="<?= htmlspecialchars($resumo['avaliacao']['data']) ?>"><?= date('d/m/Y', strtotime($resumo['avaliacao']['data'])) ?></time>
+                        <time datetime="<?= htmlspecialchars($resumo['avaliacao']['data']) ?>">
+                            <?= date('d/m/Y', strtotime($resumo['avaliacao']['data'])) ?>
+                        </time>
                     </dd>
+
                 <?php } else { ?>
+
                     <dd class="valor">—</dd>
                     <dd>Sem avaliações registadas</dd>
+
                 <?php } ?>
+
             </div>
+
         </dl>
 
-        <?php drawCartaoPainel('Explorar aulas', '/aulas.php'); ?>
-        <?php drawCartaoPainel('As minhas aulas', '/membro.php?sec=aulas'); ?>
-        <?php drawCartaoPainel('Personal Training', '/membro.php?sec=pt'); ?>
-        <?php drawCartaoPainel('Avaliações físicas', '/membro.php?sec=avaliacoes'); ?>
-        <?php drawCartaoPainel('Plano de treino', '/membro.php?sec=plano'); ?>
-        <?php drawCartaoPainel('Treinadores', '/treinadores.php'); ?>
-        <?php drawCartaoPainel('Estado dos equipamentos', '/equipamentos.php'); ?>
-        <?php drawCartaoPainel('O meu perfil', '/perfil.php'); ?>
+       <header>
+    <h2>Área de membro</h2>
+</header>
+
+<?php
+drawCartaoPainel(
+    'Explorar aulas',
+    '/aulas.php',
+    'calendario',
+    'Descobre as modalidades'
+);
+
+drawCartaoPainel(
+    'As minhas aulas',
+    '/membro.php?sec=aulas',
+    'inscricoes',
+    'Consulta as tuas inscrições'
+);
+
+drawCartaoPainel(
+    'Personal Training',
+    '/membro.php?sec=pt',
+    'treino',
+    'Gere as tuas sessões'
+);
+
+drawCartaoPainel(
+    'Avaliações físicas',
+    '/membro.php?sec=avaliacoes',
+    'avaliacao',
+    'Acompanha os teus resultados'
+);
+
+drawCartaoPainel(
+    'Plano de treino',
+    '/membro.php?sec=plano',
+    'plano',
+    'Consulta o teu plano'
+);
+
+drawCartaoPainel(
+    'Treinadores',
+    '/treinadores.php',
+    'equipa',
+    'Conhece a nossa equipa'
+);
+
+drawCartaoPainel(
+    'Estado dos equipamentos',
+    '/equipamentos.php',
+    'equipamento',
+    'Consulta a disponibilidade'
+);
+
+drawCartaoPainel(
+    'O meu perfil',
+    '/perfil.php',
+    'perfil',
+    'Gere os teus dados'
+);
+?>
     </section>
 
 <?php } ?>

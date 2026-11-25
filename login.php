@@ -6,8 +6,13 @@ if (isset($_SESSION['id'])) redirecionar('/index.php');
 
 drawHeader('Entrar');
 ?>
-<section class="formulario">
-    <h1>Entrar</h1>
+<section class="login-introducao">
+    <h1>Bem-vindo ao BioGym</h1>
+    <p>O teu treino começa aqui.</p>
+</section>
+
+<section class="formulario formulario-login">
+    <h2>Entrar</h2>
     <form action="/actions/action_login.php" method="post">
         <?php drawCsrf(); ?>
 
@@ -21,4 +26,4 @@ drawHeader('Entrar');
     </form>
     <p>Ainda não tem conta? <a href="/registo.php">Registar</a></p>
 </section>
-<?php drawFooter(); ?>
+<?php drawCsrf(); ?>

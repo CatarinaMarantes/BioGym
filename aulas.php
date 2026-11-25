@@ -37,12 +37,54 @@ $ehMembro = temPapel('MEMBRO');
 $estados = $ehMembro ? getEstadosInscricao($db, $_SESSION['id']) : array();
 
 drawHeader('Aulas');
-
-drawCabecalhoPagina('BioGym · Atividades', 'Explora as nossas aulas', 'Encontra a atividade ideal para ti.');
 ?>
 
-<section class="formulario largo">
-    <h2>Filtrar aulas</h2>
+<section class="painel-hero aulas-hero">
+
+    <div class="painel-hero-conteudo">
+
+        <p class="painel-hero-etiqueta">
+            BioGym · Atividades
+        </p>
+
+        <h1>Explora as nossas aulas</h1>
+
+        <p class="painel-hero-descricao">
+            Encontra a atividade ideal para ti
+            e desafia os teus limites.
+        </p>
+
+    </div>
+
+    <div class="painel-hero-ilustracao" aria-hidden="true">
+        <?php drawIconePainel('inscricoes'); ?>
+    </div>
+
+</section>
+
+<section class="formulario largo filtro-aulas">
+
+    <h2 class="filtro-aulas-titulo">
+
+        <svg viewBox="0 0 24 24"
+             width="22"
+             height="22"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="1.8"
+             stroke-linecap="round"
+             aria-hidden="true">
+
+            <path d="M4 6h16M4 12h16M4 18h16"/>
+            <circle cx="8" cy="6" r="2" fill="white"/>
+            <circle cx="16" cy="12" r="2" fill="white"/>
+            <circle cx="10" cy="18" r="2" fill="white"/>
+
+        </svg>
+
+        Filtrar aulas
+
+    </h2>
     <form action="/aulas.php" method="get">
         <fieldset class="campos">
             <p>
@@ -104,6 +146,30 @@ drawCabecalhoPagina('BioGym · Atividades', 'Explora as nossas aulas', 'Encontra
 
             <article class="cartao-aula">
 
+                <div class="aula-ilustracao" aria-hidden="true">
+
+                    <?php
+                    $iconesModalidade = array(
+                        'Alongamentos'    => 'alongamentos',
+                        'Boxe'            => 'boxe',
+                        'HIIT'            => 'hiit',
+                        'Musculação'      => 'treino',
+                        'Pilates'         => 'pilates',
+                        'Spinning'        => 'bicicleta',
+                        'Treino Funcional' => 'kettlebell',
+                        'Yoga'            => 'yoga',
+                        'Zumba'           => 'danca'
+                    );
+
+                    $iconeAula = isset($iconesModalidade[$aula['modalidade']])
+                        ? $iconesModalidade[$aula['modalidade']]
+                        : 'treino';
+
+                    drawIconePainel($iconeAula);
+                    ?>
+
+                </div>
+
                 <header>
                     <h2><?= e($aula['modalidade']) ?></h2>
                     <span class="etiqueta-nivel"><?= e(nomeNivel($aula['nivel'])) ?></span>
@@ -111,19 +177,31 @@ drawCabecalhoPagina('BioGym · Atividades', 'Explora as nossas aulas', 'Encontra
 
                 <dl>
                     <div>
-                        <dt>Data</dt>
+                        <dt>
+                            <?php drawIconePainel('calendario'); ?>
+                            Data
+                        </dt>
                         <dd><time datetime="<?= e($aula['data']) ?>"><?= formatarData($aula['data']) ?></time></dd>
                     </div>
                     <div>
-                        <dt>Horário</dt>
+                        <dt>
+                            <?php drawIconePainel('relogio'); ?>
+                            Horário
+                        </dt>
                         <dd><?= e($aula['horaInicio']) ?>–<?= e($aula['horaFim']) ?></dd>
                     </div>
                     <div>
-                        <dt>Treinador</dt>
+                        <dt>
+                            <?php drawIconePainel('perfil'); ?>
+                            Treinador
+                        </dt>
                         <dd><?= e($aula['treinador']) ?></dd>
                     </div>
                     <div>
-                        <dt>Sala</dt>
+                        <dt>
+                            <?php drawIconePainel('localizacao'); ?>
+                            Sala
+                        </dt>
                         <dd><?= e($aula['sala']) ?></dd>
                     </div>
                 </dl>
